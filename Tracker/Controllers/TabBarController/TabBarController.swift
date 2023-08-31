@@ -9,21 +9,28 @@ import UIKit
 
 final class TabBarController: UITabBarController {
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        let mainTrackerViewController = MainTrackerViewController()
+    let mainTrackerViewController = UINavigationController(rootViewController: TrackerViewController())
+    let statisticViewController = UINavigationController(rootViewController: StatisticViewController())
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tabBar.tintColor = .ypBlue
+        generateTabBar()
+    }
+    
+    private func generateTabBar() {
         mainTrackerViewController.tabBarItem = UITabBarItem(
-            title: nil,
+            title: "Трекеры",
             image: UIImage(named: "trackersIcon"),
             selectedImage: nil
         )
         
-//        let statisticsViewController = StatisticsViewController()
-//        statisticsViewController.tabBarItem = UITabBarItem(
-//            title: nil,
-//            image: UIImage(named: "tab_profile_active"),
-//            selectedImage: nil
-//        )
-        self.viewControllers = [mainTrackerViewController]
+        statisticViewController.tabBarItem = UITabBarItem(
+            title: "Статистика",
+            image: UIImage(named: "statisticIcon"),
+            selectedImage: nil
+        )
+        
+        self.viewControllers = [mainTrackerViewController, statisticViewController]
     }
 }

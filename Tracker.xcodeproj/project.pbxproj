@@ -8,24 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		2A12A2B42A9A2AF10024B3E4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A12A2B32A9A2AF10024B3E4 /* TabBarController.swift */; };
+		2A12A2BC2A9A74200024B3E4 /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A12A2BB2A9A74200024B3E4 /* StatisticViewController.swift */; };
 		2A7FD8662A97F104003ED0DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FD8652A97F104003ED0DD /* AppDelegate.swift */; };
 		2A7FD8682A97F104003ED0DD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FD8672A97F104003ED0DD /* SceneDelegate.swift */; };
-		2A7FD86A2A97F104003ED0DD /* MainTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FD8692A97F104003ED0DD /* MainTrackerViewController.swift */; };
+		2A7FD86A2A97F104003ED0DD /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FD8692A97F104003ED0DD /* TrackerViewController.swift */; };
 		2A7FD86F2A97F107003ED0DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A7FD86E2A97F107003ED0DD /* Assets.xcassets */; };
 		2A7FD8722A97F107003ED0DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A7FD8702A97F107003ED0DD /* LaunchScreen.storyboard */; };
-		2A7FD87A2A97FA75003ED0DD /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FD8792A97FA75003ED0DD /* Cell.swift */; };
+		2A7FD87A2A97FA75003ED0DD /* TrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FD8792A97FA75003ED0DD /* TrackerCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2A12A2B32A9A2AF10024B3E4 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		2A12A2BB2A9A74200024B3E4 /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		2A7FD8622A97F104003ED0DD /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A7FD8652A97F104003ED0DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2A7FD8672A97F104003ED0DD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2A7FD8692A97F104003ED0DD /* MainTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTrackerViewController.swift; sourceTree = "<group>"; };
+		2A7FD8692A97F104003ED0DD /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
 		2A7FD86E2A97F107003ED0DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2A7FD8712A97F107003ED0DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A7FD8732A97F107003ED0DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2A7FD8792A97FA75003ED0DD /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		2A7FD8792A97FA75003ED0DD /* TrackerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,8 +52,8 @@
 		2A12A2B52A9A2AFF0024B3E4 /* MainTracker */ = {
 			isa = PBXGroup;
 			children = (
-				2A7FD8692A97F104003ED0DD /* MainTrackerViewController.swift */,
-				2A7FD8792A97FA75003ED0DD /* Cell.swift */,
+				2A7FD8692A97F104003ED0DD /* TrackerViewController.swift */,
+				2A7FD8792A97FA75003ED0DD /* TrackerCell.swift */,
 			);
 			path = MainTracker;
 			sourceTree = "<group>";
@@ -69,6 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				2A12A2B52A9A2AFF0024B3E4 /* MainTracker */,
+				2A12A2BA2A9A73F50024B3E4 /* Statistic */,
 				2A12A2B22A9A2AD90024B3E4 /* TabBarController */,
 			);
 			path = Controllers;
@@ -82,6 +85,14 @@
 				2A7FD8732A97F107003ED0DD /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		2A12A2BA2A9A73F50024B3E4 /* Statistic */ = {
+			isa = PBXGroup;
+			children = (
+				2A12A2BB2A9A74200024B3E4 /* StatisticViewController.swift */,
+			);
+			path = Statistic;
 			sourceTree = "<group>";
 		};
 		2A7FD8592A97F104003ED0DD = {
@@ -180,9 +191,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A7FD86A2A97F104003ED0DD /* MainTrackerViewController.swift in Sources */,
-				2A7FD87A2A97FA75003ED0DD /* Cell.swift in Sources */,
+				2A7FD86A2A97F104003ED0DD /* TrackerViewController.swift in Sources */,
+				2A7FD87A2A97FA75003ED0DD /* TrackerCell.swift in Sources */,
 				2A7FD8662A97F104003ED0DD /* AppDelegate.swift in Sources */,
+				2A12A2BC2A9A74200024B3E4 /* StatisticViewController.swift in Sources */,
 				2A12A2B42A9A2AF10024B3E4 /* TabBarController.swift in Sources */,
 				2A7FD8682A97F104003ED0DD /* SceneDelegate.swift in Sources */,
 			);
