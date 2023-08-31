@@ -1,5 +1,5 @@
 //
-//  MainTrackerViewController.swift
+//  TrackerViewController.swift
 //  Tracker
 //
 //  Created by Руслан  on 24.08.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MainTrackerViewController: UIViewController {
+final class TrackerViewController: UIViewController {
     
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let cellReuseIdentifier = "cell"
@@ -49,7 +49,7 @@ final class MainTrackerViewController: UIViewController {
     private func setupAllConstraints() {
         NSLayoutConstraint.activate([
             errorImageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            errorImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            errorImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             errorImageView.heightAnchor.constraint(equalToConstant: 80),
             errorImageView.widthAnchor.constraint(equalToConstant: 80),
             
@@ -110,7 +110,7 @@ final class MainTrackerViewController: UIViewController {
 
 }
 
-extension MainTrackerViewController: UICollectionViewDataSource {
+extension TrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 15
     }
@@ -124,7 +124,7 @@ extension MainTrackerViewController: UICollectionViewDataSource {
     
 }
 
-extension MainTrackerViewController: UISearchResultsUpdating {
+extension TrackerViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         
