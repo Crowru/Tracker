@@ -16,6 +16,16 @@ final class TabBarController: UITabBarController {
         super.viewDidLoad()
         tabBar.tintColor = .ypBlue
         generateTabBar()
+        
+        if #available(iOS 13.0, *) {
+            let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
+            tabBarAppearance.configureWithDefaultBackground()
+            tabBarAppearance.backgroundColor = .whiteDay
+            UITabBar.appearance().standardAppearance = tabBarAppearance
+            if #available(iOS 15.0, *) {
+                UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+            }
+        }
     }
     
     private func generateTabBar() {
