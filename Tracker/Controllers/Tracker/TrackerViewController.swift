@@ -274,6 +274,19 @@ extension TrackerViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let weekDay = datePicker.calendar.component(.weekday, from: currentDate)
+        var day = ""
+        switch weekDay {
+        case 1: day = "Вс"
+        case 2: day = "Пн"
+        case 3: day = "Вт"
+        case 4: day = "Ср"
+        case 5: day = "Чт"
+        case 6: day = "Пт"
+        case 7: day = "Сб"
+        default: break
+        }
+        
         var filteredTrackers: [Tracker] = []
         
         for category in categories {
@@ -281,7 +294,19 @@ extension TrackerViewController: UISearchBarDelegate {
             filteredTrackers.append(contentsOf: matchingTrackers)
         }
         
-        visibleCategories = categories.compactMap { category in
+        filteredCategoriesByDate = categories.map { category in
+            let filterTrackers = category.trackers.filter { tracker in
+                if let timetable = tracker.timetable {
+                    return timetable.contains(where: { $0 == day })
+                } else {
+                    return true
+                }
+            }
+            return TrackerCategory(title: category.title, trackers: filterTrackers)
+        }
+        
+        
+        visibleCategories = filteredCategoriesByDate.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
                 return filteredTrackers.contains { $0.id == tracker.id }
             }
@@ -299,7 +324,7 @@ extension TrackerViewController: UISearchBarDelegate {
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        visibleCategories = categories
+        visibleCategories = filteredCategoriesByDate
         updateCollectionView()
     }
     
