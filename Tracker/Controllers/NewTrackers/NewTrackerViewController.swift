@@ -151,7 +151,7 @@ final class NewTrackerViewController: UIViewController {
     private var detailTextDays: [String]?
     private var isSelectedEmoji: IndexPath?
     private var isSelectedColor: IndexPath?
-    private var isEnabledDictionary = ["text": false, "category": false, "timatable": false, "emoji": false, "colour": false]
+    private var isEnabledDictionary = ["text": false, "category": false, "timetable": false, "emoji": false, "colour": false]
     
     //MARK: LifeCycle
     override func viewDidLoad() {
@@ -240,7 +240,7 @@ extension NewTrackerViewController: UITextFieldDelegate {
 // MARK: - UITableViewDataSource
 extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        chooseIrregularEvent ? (isEnabledDictionary["timatable"] = true) : (isEnabledDictionary["timatable"] = false)
+        chooseIrregularEvent ? (isEnabledDictionary["timetable"] = true) : (isEnabledDictionary["timetable"] = false)
         return chooseIrregularEvent ? 1 : 2
     }
     
@@ -264,7 +264,7 @@ extension NewTrackerViewController: UITableViewDataSource {
             if let days = detailTextDays {
                 if days.count == 7 {
                     detailTextLabel.text = "Каждый день"
-                    isEnabledDictionary["timatable"] = true
+                    isEnabledDictionary["timetable"] = true
                     createButtonIsEnabled()
                 } else {
                     let orderedDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
@@ -278,7 +278,7 @@ extension NewTrackerViewController: UITableViewDataSource {
                     let daysText = sortedDays.joined(separator: ", ")
                     detailTextLabel.text = daysText
                     
-                    (daysText.isEmpty) ?  (isEnabledDictionary["timatable"] = false) : (isEnabledDictionary["timetable"] = true)
+                    (daysText.isEmpty) ? (isEnabledDictionary["timetable"] = false) : (isEnabledDictionary["timetable"] = true)
                     createButtonIsEnabled()
                 }
             }
@@ -469,6 +469,7 @@ extension NewTrackerViewController: HabitDelegate {
 extension NewTrackerViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         view.endEditing(true)
+        print(isEnabledDictionary)
     }
 }
 

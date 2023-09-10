@@ -52,12 +52,11 @@ final class TrackersTypeViewController: UIViewController {
     private func addIreggularEvent() {
         let eventViewController = NewTrackerViewController()
         eventViewController.title = "Новое нерегулярное событие"
-        
+        eventViewController.chooseIrregularEvent = true
         eventViewController.onTrackerCreated = { [weak self] (tracker, titleCategory) in
             guard let self else { return }
             self.delegate?.createTracker(tracker, titleCategory: titleCategory)
         }
-        eventViewController.chooseIrregularEvent = true
         
         let navigationController = UINavigationController(rootViewController: eventViewController)
         navigationController.navigationBar.barTintColor = .white
