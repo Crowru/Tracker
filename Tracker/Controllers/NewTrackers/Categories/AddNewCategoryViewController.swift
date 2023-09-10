@@ -34,11 +34,23 @@ final class AddNewCategoryViewController: UIViewController {
         return button
     }()
     
-    weak var delegate: AddNewСategoryViewControllerDelegate?
+    private weak var delegate: AddNewСategoryViewControllerDelegate?
     
-    var isEdit: Bool = false
+    private var isEdit: Bool = false
+    private var editText: String?
     
-    var editText: String?
+    // MARK: Initialisation
+    init(isEdit: Bool, editText: String?, delegate: AddNewСategoryViewControllerDelegate) {
+        self.isEdit = isEdit
+        self.editText = editText
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+        title = isEdit ? "Редактировать" : "Новая категория"
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

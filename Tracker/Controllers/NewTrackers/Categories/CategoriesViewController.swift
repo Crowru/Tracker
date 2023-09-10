@@ -87,10 +87,7 @@ final class CategoriesViewController: UIViewController {
     }
     
     private func goToAddNewCategory(isEdit: Bool = false, text: String? = nil) {
-        let addNewCategoryViewController = AddNewCategoryViewController()
-        addNewCategoryViewController.delegate = self
-        addNewCategoryViewController.isEdit = isEdit
-        addNewCategoryViewController.editText = text
+        let addNewCategoryViewController = AddNewCategoryViewController(isEdit: isEdit, editText: text, delegate: self)
         
         let navigationController = UINavigationController(rootViewController: addNewCategoryViewController)
         navigationController.navigationBar.barTintColor = .white
