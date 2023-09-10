@@ -23,6 +23,7 @@ final class TrackerViewController: UIViewController & TrackerViewControllerDeleg
     private let errorImage = UIImage(named: "errorImage")
     
     var currentDate: Date { return datePicker.date }
+    private var currentDayOfweek: Int { datePicker.calendar.component(.weekday, from: currentDate) }
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -126,18 +127,8 @@ final class TrackerViewController: UIViewController & TrackerViewControllerDeleg
     }
     
     private func filteredByDate(weekDay: Int, chooseMethod: Bool) {
-        let weekDay = weekDay
-        var day = ""
-        switch weekDay {
-        case 1: day = "Вс"
-        case 2: day = "Пн"
-        case 3: day = "Вт"
-        case 4: day = "Ср"
-        case 5: day = "Чт"
-        case 6: day = "Пт"
-        case 7: day = "Сб"
-        default: break
-        }
+        let day = weekdayToString(weekDay)
+        
         filteredCategoriesByDate = categories
         for category in categories {
             var filterTrackers: [Tracker] = []
@@ -274,14 +265,14 @@ extension TrackerViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredCategoriesByDate = filterCategoriesByDay(categories, forDay: weekdayToString(currentDayOfweek))
+        
         var filteredTrackers: [Tracker] = []
         
-        for category in categories {
+        for category in filteredCategoriesByDate {
             let matchingTrackers = category.trackers.filter { $0.name.lowercased().hasPrefix(searchText.lowercased()) }
             filteredTrackers.append(contentsOf: matchingTrackers)
         }
-        
-        filteredCategoriesByDate = filterCategoriesByDay(categories)
         
         visibleCategories = filteredCategoriesByDate.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
@@ -301,24 +292,11 @@ extension TrackerViewController: UISearchBarDelegate {
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        visibleCategories = filterCategoriesByDay(categories)
+        visibleCategories = filterCategoriesByDay(categories, forDay: weekdayToString(currentDayOfweek))
         updateCollectionView()
     }
     
-    private func filterCategoriesByDay(_ categories: [TrackerCategory]) -> [TrackerCategory] {
-        let weekDay = datePicker.calendar.component(.weekday, from: currentDate)
-        var day = ""
-        switch weekDay {
-        case 1: day = "Вс"
-        case 2: day = "Пн"
-        case 3: day = "Вт"
-        case 4: day = "Ср"
-        case 5: day = "Чт"
-        case 6: day = "Пт"
-        case 7: day = "Сб"
-        default: break
-        }
-        
+    private func filterCategoriesByDay(_ categories: [TrackerCategory], forDay day: String) -> [TrackerCategory] {
         return categories.compactMap { category in
             let filterTrackers = category.trackers.filter { tracker in
                 if let timetable = tracker.timetable {
@@ -331,6 +309,19 @@ extension TrackerViewController: UISearchBarDelegate {
                 return TrackerCategory(title: category.title, trackers: filterTrackers)
             }
             return nil
+        }
+    }
+    
+    private func weekdayToString(_ weekday: Int) -> String {
+        switch weekday {
+        case 1: return "Вс"
+        case 2: return "Пн"
+        case 3: return "Вт"
+        case 4: return "Ср"
+        case 5: return "Чт"
+        case 6: return "Пт"
+        case 7: return "Сб"
+        default: return ""
         }
     }
     
