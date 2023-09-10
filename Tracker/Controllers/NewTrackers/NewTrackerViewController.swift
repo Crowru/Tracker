@@ -43,7 +43,7 @@ final class NewTrackerViewController: UIViewController {
         let label = UILabel()
         label.text = "Ограничение 38 символов"
         label.font = UIFont.systemFont(ofSize: 17)
-        label.textColor = .ypRed
+        label.textColor = .yp_Red
         label.numberOfLines = 1
         label.textAlignment = .center
         label.isHidden = true
@@ -115,8 +115,8 @@ final class NewTrackerViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Отменить", for: .normal)
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.ypRed.cgColor
-        button.setTitleColor(.ypRed, for: .normal)
+        button.layer.borderColor = UIColor.yp_Red.cgColor
+        button.setTitleColor(.yp_Red, for: .normal)
         button.backgroundColor = .white
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -128,7 +128,7 @@ final class NewTrackerViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Создать", for: .normal)
         button.tintColor = .white
-        button.backgroundColor = .ypGray
+        button.backgroundColor = .yp_Gray
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(createNewTracker), for: .touchUpInside)
@@ -168,7 +168,7 @@ final class NewTrackerViewController: UIViewController {
                 isEnabledDictionary["emoji"] == true &&
                 isEnabledDictionary["colour"] == true else {
             createButton.isEnabled = false
-            createButton.backgroundColor = .ypGray
+            createButton.backgroundColor = .yp_Gray
             return }
         createButton.isEnabled = true
         createButton.backgroundColor = .ypBlackDay
@@ -252,7 +252,7 @@ extension NewTrackerViewController: UITableViewDataSource {
         
         guard let detailTextLabel = cell.detailTextLabel else { return cell }
         detailTextLabel.font = UIFont.systemFont(ofSize: 17)
-        detailTextLabel.textColor = .ypGray
+        detailTextLabel.textColor = .yp_Gray
         
         switch indexPath.row {
         case 0:
@@ -369,7 +369,7 @@ extension NewTrackerViewController: UICollectionViewDelegate & UICollectionViewD
             }
             let cell = collectionView.cellForItem(at: indexPath)
             cell?.layer.cornerRadius = 10
-            cell?.backgroundColor = .ypLightGray
+            cell?.backgroundColor = .yp_LightGray
             isSelectedEmoji = indexPath
             isEnabledDictionary["emoji"] = true
             createButtonIsEnabled()

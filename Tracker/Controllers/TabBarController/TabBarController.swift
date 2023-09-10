@@ -14,13 +14,13 @@ final class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.tintColor = .ypBlue
+        tabBar.tintColor = .yp_Blue
         generateTabBar()
         
         if #available(iOS 13.0, *) {
             let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
             tabBarAppearance.configureWithDefaultBackground()
-            tabBarAppearance.backgroundColor = .whiteDay
+            tabBarAppearance.backgroundColor = .ypWhiteDay
             UITabBar.appearance().standardAppearance = tabBarAppearance
             if #available(iOS 15.0, *) {
                 UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
