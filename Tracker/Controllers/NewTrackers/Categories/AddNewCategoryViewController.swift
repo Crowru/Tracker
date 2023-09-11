@@ -36,8 +36,8 @@ final class AddNewCategoryViewController: UIViewController {
     
     private weak var delegate: AddNewСategoryViewControllerDelegate?
     
-    private var isEdit: Bool = false
-    private var editText: String?
+    private let isEdit: Bool
+    private let editText: String?
     
     // MARK: Initialisation
     init(isEdit: Bool, editText: String?, delegate: AddNewСategoryViewControllerDelegate) {
