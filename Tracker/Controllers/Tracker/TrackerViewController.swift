@@ -16,15 +16,17 @@ protocol TrackerViewControllerDelegate: AnyObject {
     func createTracker(_ tracker: Tracker?, titleCategory: String?)
 }
 
-final class TrackerViewController: UIViewController & TrackerViewControllerDelegate {
+final class TrackerViewController: UIViewController {
     
     private let params = GeometryParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpacing: 9)
     private let noFoundImage = UIImage(named: "noFound")
     private let errorImage = UIImage(named: "errorImage")
     
-    var currentDate: Date { return datePicker.date }
-    private var currentDayOfweek: Int { datePicker.calendar.component(.weekday, from: currentDate) }
+    private let trackerStore = TrackerStore()
+    private let trackerCategoryStore = TrackerCategoryStore()
     
+    var currentDate: Date { return datePicker.date }
+        
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: TrackerCell.identifier)
@@ -42,19 +44,23 @@ final class TrackerViewController: UIViewController & TrackerViewControllerDeleg
         picker.preferredDatePickerStyle = .compact
         picker.datePickerMode = .date
         picker.tintColor = .systemBlue
+        picker.date = Date()
         picker.addTarget(self, action: #selector(datePickerValueChanges), for: .valueChanged)
         return picker
     }()
-        
+    
+    private var pinTracker = false
+    
+    private lazy var weekDay = {
+        datePicker.calendar.component(.weekday, from: currentDate)
+    }()
+    
     private var searchController: UISearchController?
     
     private var categories: [TrackerCategory] = []
-        
-    private var filteredCategoriesByDate: [TrackerCategory] = []
-    
-    private var completedTrackers: Set<TrackerRecord> = []
-    
     private var visibleCategories: [TrackerCategory] = []
+    private var filteredCategoriesByDate: [TrackerCategory] = []
+    private var completedTrackers: Set<TrackerRecord> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,30 +68,17 @@ final class TrackerViewController: UIViewController & TrackerViewControllerDeleg
         setupConstraints()
         setupNavigationBar()
         setupSearch()
-        updateCollectionView()
-    }
-    
-    func createTracker(_ tracker: Tracker?, titleCategory: String?) {
-        guard let newTracker = tracker, let newTitleCategory = titleCategory else { return }
-        let newCategory = TrackerCategory(title: newTitleCategory, trackers: [newTracker])
-        if categories.contains(where: { $0.title == newCategory.title }) {
-            guard let index = categories.firstIndex(where: { $0.title == newCategory.title }) else { return }
-            let oldCategory = categories[index]
-            let updatedTrackers = oldCategory.trackers + newCategory.trackers
-            let updatedTrackerCategory = TrackerCategory(title: newCategory.title, trackers: updatedTrackers)
-            categories[index] = updatedTrackerCategory
-        } else {
-            categories.append(newCategory)
-        }
-        let weekDay = datePicker.calendar.component(.weekday, from: currentDate)
         filteredByDate(weekDay: weekDay, chooseMethod: true)
     }
     
-    private func updateCollectionView() {
-        if categories.isEmpty {
-            let emptyView = EmptyView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height), 
-                                      image: errorImage,
-                                      text: "Что будем отслеживать?")
+    private func showBackgroundView(forCollection: Bool) {
+        if visibleCategories.isEmpty {
+            let emptyView = EmptyView(frame: CGRect(x: 0,
+                                                    y: 0,
+                                                    width: view.bounds.width,
+                                                    height: view.bounds.height),
+                                      image: forCollection ? errorImage : noFoundImage,
+                                      text: forCollection ? "Что будем отслеживать?" : "Ничего не найдено")
             collectionView.backgroundView = emptyView
         } else {
             collectionView.backgroundView = nil
@@ -122,12 +115,13 @@ final class TrackerViewController: UIViewController & TrackerViewControllerDeleg
     
     @objc
     private func datePickerValueChanges(_ sender: UIDatePicker) {
-        let weekDay = sender.calendar.component(.weekday, from: sender.date)
+        weekDay = sender.calendar.component(.weekday, from: sender.date)
         filteredByDate(weekDay: weekDay, chooseMethod: false)
     }
     
+    // MARK: Filtered by date
     private func filteredByDate(weekDay: Int, chooseMethod: Bool) {
-        let day = weekdayToString(weekDay)
+        let day = "".shortStringDayForInt(weekDay)
         
         filteredCategoriesByDate = categories
         for category in categories {
@@ -135,6 +129,9 @@ final class TrackerViewController: UIViewController & TrackerViewControllerDeleg
             for tracker in category.trackers {
                 if let timetable = tracker.timetable {
                     if timetable.contains(where: { $0 == day }) {
+                        filterTrackers.append(tracker)
+                    }
+                    if timetable.isEmpty {
                         filterTrackers.append(tracker)
                     }
                 } else {
@@ -151,18 +148,53 @@ final class TrackerViewController: UIViewController & TrackerViewControllerDeleg
             guard let index = categories.firstIndex(where: { $0.trackers.isEmpty }) else { return }
             categories.remove(at: index)
         }
-        updateCollectionView()
         visibleCategories = categories
         chooseMethod ? categories = filteredCategoriesByDate : (dismiss(animated: true) {
                 self.categories = self.filteredCategoriesByDate
             })
-        datePicker.date = currentDate
+        showBackgroundView(forCollection: true)
+    }
+}
+
+// MARK: - TrackerViewControllerDelegate
+extension TrackerViewController: TrackerViewControllerDelegate {
+    func createTracker(_ tracker: Tracker?, titleCategory: String?) {
+        guard let newTracker = tracker, let newTitleCategory = titleCategory else { return }
+        do {
+            try trackerCategoryStore.createTrackerWithCategory(tracker: newTracker, with: newTitleCategory)
+        } catch {
+            print("failed create tracker")
+        }
+        categories = trackerCategoryStore.categories
+        filteredByDate(weekDay: weekDay, chooseMethod: true)
+    }
+}
+
+// MARK: - TrackerCellDelegate
+extension TrackerViewController: TrackerCellDelegate {
+    func plusButtonTapped(on cell: TrackerCell) {
+        let indexPath: IndexPath = collectionView.indexPath(for: cell) ?? IndexPath()
+        let id = visibleCategories[indexPath.section].trackers[indexPath.row].id
+        var daysCount = completedTrackers.filter { $0.id == id }.count
+        let isToday = completedTrackers.contains(where: { $0.id == id && areDatesEqualIgnoringTime(date1: $0.date, date2: currentDate) })
+        if !isToday {
+            completedTrackers.insert(TrackerRecord(id: id, date: currentDate))
+            daysCount += 1
+        } else {
+            completedTrackers.remove(TrackerRecord(id: id, date: currentDate))
+            daysCount -= 1
+        }
+        cell.completeTracker(days: daysCount, isToday: !isToday)
+    }
+    
+    private func areDatesEqualIgnoringTime(date1: Date, date2: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(date1, equalTo: date2, toGranularity: .day)
     }
 }
 
 // MARK: - UICollectionViewDataSource
 extension TrackerViewController: UICollectionViewDataSource {
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         visibleCategories.count
     }
@@ -192,34 +224,83 @@ extension TrackerViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: - TrackerCellDelegate
-extension TrackerViewController: TrackerCellDelegate {
-    func plusButtonTapped(on cell: TrackerCell) {
-        let indexPath: IndexPath = collectionView.indexPath(for: cell) ?? IndexPath()
-        let id = visibleCategories[indexPath.section].trackers[indexPath.row].id
-        var daysCount = completedTrackers.filter { $0.id == id }.count
-        let isToday = completedTrackers.contains(where: { $0.id == id && areDatesEqualIgnoringTime(date1: $0.date, date2: currentDate) })
-        if !isToday {
-            completedTrackers.insert(TrackerRecord(id: id, date: currentDate))
-            daysCount += 1
-        } else {
-            completedTrackers.remove(TrackerRecord(id: id, date: currentDate))
-            daysCount -= 1
-        }
-        cell.completeTracker(days: daysCount, isToday: !isToday)
-    }
-    
-    private func areDatesEqualIgnoringTime(date1: Date, date2: Date) -> Bool {
-        let calendar = Calendar.current
-        return calendar.isDate(date1, equalTo: date2, toGranularity: .day)
-    }
-}
-
 // MARK: - UICollectionViewDelegate
 extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+    }
+    
+    // MARK: Context menu configuration
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfiguration configuration: UIContextMenuConfiguration,
+                        highlightPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
+        let targetView = configurationTargetView(indexPath: indexPath)
+        return UITargetedPreview(view: targetView.0, parameters: targetView.1)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfiguration configuration: UIContextMenuConfiguration,
+                        dismissalPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
+        
+        let targetView = configurationTargetView(indexPath: indexPath)
+        return UITargetedPreview(view: targetView.0, parameters: targetView.1)
+    }
+    private func configurationTargetView(indexPath: IndexPath) -> (UIView, UIPreviewParameters) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell else { return (UIView(), UIPreviewParameters())}
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+        let targetView = cell.colorView
+        return (targetView, parameters)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemsAt indexPaths: [IndexPath],
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard indexPaths.count > 0 else { return nil }
+        let indexPath = indexPaths[0]
+        let menu = UIMenu(
+            children: [
+                UIAction(title: pinTracker ? "Открепить" : "Закрепить") { [weak self] _ in
+                    guard let self else { return }
+                    if self.pinTracker {
+                        self.makeUnpin(indexPath: indexPath)
+                    } else {
+                        self.makePin(indexPath: indexPath)
+                    }
+                },
+                UIAction(title: "Редактировать") { [weak self] _ in
+                    guard let self else { return }
+                    self.makeEdit(indexPath: indexPath)
+                },
+                UIAction(title: "Удалить", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: .destructive) {[weak self] _ in
+                    guard let self else { return }
+                    self.makeDelete(indexPath: indexPath)}
+            ])
+        
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            return menu
+        }
+        
+        return configuration
+    }
+    private func makePin(indexPath: IndexPath) {
+        pinTracker = true
+        let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell
+        cell?.pinnedImageEnabled(yes: pinTracker)
+    }
+    private func makeUnpin(indexPath: IndexPath) {
+        pinTracker = false
+        let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell
+        cell?.pinnedImageEnabled(yes: pinTracker)
+    }
+    private func makeEdit(indexPath: IndexPath) {
+        let _ = collectionView.cellForItem(at: indexPath) as? TrackerCell
+        //cell?.backgroundColor = .red
+    }
+    private func makeDelete(indexPath: IndexPath) {
+        let _ = collectionView.cellForItem(at: indexPath) as? TrackerCell
+        //cell?.backgroundColor = .systemBackground
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
@@ -259,41 +340,39 @@ extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDele
 
 //MARK: - UISearchBarDelegate
 extension TrackerViewController: UISearchBarDelegate {
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredCategoriesByDate = filterCategoriesByDay(categories, forDay: weekdayToString(currentDayOfweek))
-        
-        var filteredTrackers: [Tracker] = []
-        
-        for category in filteredCategoriesByDate {
-            let matchingTrackers = category.trackers.filter { $0.name.lowercased().hasPrefix(searchText.lowercased()) }
-            filteredTrackers.append(contentsOf: matchingTrackers)
-        }
-        
-        visibleCategories = filteredCategoriesByDate.compactMap { category in
-            let filteredTrackers = category.trackers.filter { tracker in
-                return filteredTrackers.contains { $0.id == tracker.id }
-            }
-            if !filteredTrackers.isEmpty {
-                return TrackerCategory(title: category.title, trackers: filteredTrackers)
-            }
-            return nil
-        }
-        
-        updateCollectionView()
-        if visibleCategories.isEmpty {
-            let trackerViewStub = EmptyView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height), image: noFoundImage,
-                                            text: "Ничего не найдено")
-            collectionView.backgroundView = trackerViewStub
-        }
+        filterCategories(with: searchText)
     }
+
+    private func filterCategories(with searchText: String) {
+        if searchText.isEmpty {
+            filteredByDate(weekDay: weekDay, chooseMethod: true)
+        } else {
+            visibleCategories = categories.map { category -> TrackerCategory in
+                let filteredTrackers = category.trackers.filter { tracker -> Bool in
+                    let isNameMatching = tracker.name.lowercased().contains(searchText.lowercased())
+
+                    if let timetable = tracker.timetable, !timetable.isEmpty {
+                        return isNameMatching && timetable.contains { $0 == "".shortStringDayForInt(weekDay) }
+                    } else {
+                        return isNameMatching
+                    }
+                }
+
+                let filteredCategory = TrackerCategory(title: category.title, trackers: filteredTrackers)
+
+                return filteredCategory
+            }.filter { $0.trackers.count > 0 }
+        }
+        showBackgroundView(forCollection: false)
+    }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        visibleCategories = filterCategoriesByDay(categories, forDay: weekdayToString(currentDayOfweek))
-        updateCollectionView()
+        filteredByDate(weekDay: weekDay, chooseMethod: true)
     }
     
     private func filterCategoriesByDay(_ categories: [TrackerCategory], forDay day: String) -> [TrackerCategory] {
@@ -312,19 +391,6 @@ extension TrackerViewController: UISearchBarDelegate {
         }
     }
     
-    private func weekdayToString(_ weekday: Int) -> String {
-        switch weekday {
-        case 1: return "Вс"
-        case 2: return "Пн"
-        case 3: return "Вт"
-        case 4: return "Ср"
-        case 5: return "Чт"
-        case 6: return "Пт"
-        case 7: return "Сб"
-        default: return ""
-        }
-    }
-    
     private func setupSearch() {
         searchController = UISearchController(searchResultsController: nil)
         searchController?.searchBar.delegate = self
@@ -338,7 +404,6 @@ extension TrackerViewController: UISearchBarDelegate {
         ]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отмена"
-        
         definesPresentationContext = true
     }
 }
@@ -346,6 +411,11 @@ extension TrackerViewController: UISearchBarDelegate {
 //MARK: - SetupViews
 private extension TrackerViewController {
     func setupViews() {
+        
+        categories = trackerCategoryStore.categories
+        visibleCategories = categories
+        filteredCategoriesByDate = categories
+        
         view.addSubviews(collectionView)
     }
     
