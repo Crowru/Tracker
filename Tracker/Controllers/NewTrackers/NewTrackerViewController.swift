@@ -159,6 +159,7 @@ final class NewTrackerViewController: UIViewController {
         setupView()
         setupConstraints()
         updateCollectionViewHeight()
+        
     }
     
     private func createButtonIsEnabled() {
@@ -178,7 +179,17 @@ final class NewTrackerViewController: UIViewController {
         view.endEditing(true)
     }
     
+    private func hideKeybooardWhenClickAnywhere() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardWhenClickAnywhere))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
     // MARK: Actions
+    @objc func dismissKeyboardWhenClickAnywhere() {
+        view.endEditing(true)
+    }
+    
     @objc
     private func createNewTracker() {
         guard let text = textField.text, let category = detailTextCategory else { return }
@@ -363,24 +374,23 @@ extension NewTrackerViewController: UICollectionViewDelegate & UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         dismissKeyboard()
         if indexPath.section == 0 {
-            if let selectedCell = isSelectedEmoji {
-                let cell = collectionView.cellForItem(at: selectedCell)
-                cell?.backgroundColor = .clear
+            if let selectedCell = isSelectedEmoji, let cell = collectionView.cellForItem(at: selectedCell) {
+                cell.backgroundColor = .clear
+                collectionView.deselectItem(at: selectedCell, animated: true)
             }
             let cell = collectionView.cellForItem(at: indexPath)
-            cell?.layer.cornerRadius = 10
+            cell?.layer.cornerRadius = 16
             cell?.backgroundColor = .yp_LightGray
             isSelectedEmoji = indexPath
             isEnabledDictionary["emoji"] = true
             createButtonIsEnabled()
         } else if indexPath.section == 1 {
-            if let selectedCell = isSelectedColor {
-                let cell = collectionView.cellForItem(at: selectedCell)
-                cell?.layer.borderWidth = 0
-                cell?.layer.borderColor = .none
+            if let selectedCell = isSelectedColor, let cell = collectionView.cellForItem(at: selectedCell) {
+                cell.layer.borderWidth = 0
+                collectionView.deselectItem(at: selectedCell, animated: true)
             }
             let cell = collectionView.cellForItem(at: indexPath)
-            cell?.layer.cornerRadius = 10
+            cell?.layer.cornerRadius = 8
             cell?.layer.borderWidth = 3
             cell?.layer.borderColor = UIColor.colorSelection[indexPath.row].withAlphaComponent(0.3).cgColor
             isSelectedColor = indexPath
@@ -476,6 +486,8 @@ extension NewTrackerViewController: UIScrollViewDelegate {
 // MARK: - SetupViews
 private extension NewTrackerViewController {
     func setupView() {
+        hideKeybooardWhenClickAnywhere()
+        
         view.backgroundColor = .white
         view.addSubviews(scrollView)
         scrollView.addSubviews(contentView)

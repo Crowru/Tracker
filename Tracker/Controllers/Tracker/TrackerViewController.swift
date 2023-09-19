@@ -22,8 +22,8 @@ final class TrackerViewController: UIViewController {
     private let noFoundImage = UIImage(named: "noFound")
     private let errorImage = UIImage(named: "errorImage")
     
-    private let trackerStore = TrackerStore()
     private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerRecordStore = TrackerRecordStore()
     
     var currentDate: Date { return datePicker.date }
         
@@ -177,11 +177,18 @@ extension TrackerViewController: TrackerCellDelegate {
         let id = visibleCategories[indexPath.section].trackers[indexPath.row].id
         var daysCount = completedTrackers.filter { $0.id == id }.count
         let isToday = completedTrackers.contains(where: { $0.id == id && areDatesEqualIgnoringTime(date1: $0.date, date2: currentDate) })
+        
         if !isToday {
-            completedTrackers.insert(TrackerRecord(id: id, date: currentDate))
+            completedTrackers.insert(TrackerRecord(id: id, date: currentDate, days: daysCount))
+            do {
+                _ = try trackerRecordStore.createTrackerRecord(from: TrackerRecord(id: id, date: currentDate, days: daysCount))
+            } catch {
+                assertionFailure("Can't add TrackerRecord")
+            }
             daysCount += 1
         } else {
-            completedTrackers.remove(TrackerRecord(id: id, date: currentDate))
+            completedTrackers.remove(TrackerRecord(id: id, date: currentDate, days: daysCount))
+            trackerRecordStore.deleteTrackerRecord(trackerRecord: TrackerRecord(id: id, date: currentDate, days: daysCount))
             daysCount -= 1
         }
         cell.completeTracker(days: daysCount, isToday: !isToday)
@@ -415,6 +422,7 @@ private extension TrackerViewController {
         categories = trackerCategoryStore.categories
         visibleCategories = categories
         filteredCategoriesByDate = categories
+        completedTrackers = Set(trackerRecordStore.trackerRecords)
         
         view.addSubviews(collectionView)
     }
