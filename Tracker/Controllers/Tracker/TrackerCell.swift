@@ -25,7 +25,7 @@ final class TrackerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var colorView: UIView = {
+    lazy var colorView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
         view.clipsToBounds = true
@@ -67,10 +67,17 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
+    private let pinnedImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "Pinned")
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     private func setupViews() {
-        self.backgroundColor = .white
+        self.backgroundColor = .clear
         contentView.addSubviews(colorView, counterLabel, plusButton)
-        colorView.addSubviews(emojiLabel, textLabel)
+        colorView.addSubviews(emojiLabel, textLabel, pinnedImage)
     }
     
     private func setupConstraints() {
@@ -95,8 +102,17 @@ final class TrackerCell: UICollectionViewCell {
             plusButton.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 8),
             plusButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant:  -12),
             plusButton.heightAnchor.constraint(equalToConstant: 34),
-            plusButton.widthAnchor.constraint(equalToConstant: 34)
+            plusButton.widthAnchor.constraint(equalToConstant: 34),
+            
+            pinnedImage.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 12),
+            pinnedImage.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -12),
+            pinnedImage.heightAnchor.constraint(equalToConstant: 24),
+            pinnedImage.widthAnchor.constraint(equalToConstant: 24)
         ])
+    }
+    
+    func pinnedImageEnabled(yes: Bool) {
+        yes ? pinnedImage.isHidden = false : (pinnedImage.isHidden = true)
     }
     
     func setupCell(tracker: Tracker) {

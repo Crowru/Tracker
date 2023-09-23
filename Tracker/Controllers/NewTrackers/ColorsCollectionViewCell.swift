@@ -10,7 +10,7 @@ import UIKit
 final class ColorsCollectionViewCell: UICollectionViewCell {    
     let colorView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 8
         view.layer.masksToBounds = true
         return view
     }()
