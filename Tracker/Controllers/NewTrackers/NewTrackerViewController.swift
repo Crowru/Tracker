@@ -179,17 +179,7 @@ final class NewTrackerViewController: UIViewController {
         view.endEditing(true)
     }
     
-    private func hideKeybooardWhenClickAnywhere() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardWhenClickAnywhere))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
     // MARK: Actions
-    @objc func dismissKeyboardWhenClickAnywhere() {
-        view.endEditing(true)
-    }
-    
     @objc
     private func createNewTracker() {
         guard let text = textField.text, let category = detailTextCategory else { return }
@@ -486,8 +476,7 @@ extension NewTrackerViewController: UIScrollViewDelegate {
 // MARK: - SetupViews
 private extension NewTrackerViewController {
     func setupView() {
-        hideKeybooardWhenClickAnywhere()
-        
+        _ = self.hideKeyboardWhenClicked
         view.backgroundColor = .white
         view.addSubviews(scrollView)
         scrollView.addSubviews(contentView)

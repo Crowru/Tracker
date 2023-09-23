@@ -8,12 +8,16 @@
 import UIKit
 
 protocol TrackerCellDelegate: AnyObject {
-    func plusButtonTapped(on cell: TrackerCell)
+    func completedTracker(id: UUID, at indexPath: IndexPath)
+    func uncompletedTracker(id: UUID, at indexPath: IndexPath)
 }
 
 final class TrackerCell: UICollectionViewCell {
     
     weak var delegate: TrackerCellDelegate?
+    private var isCompletedToday = false
+    private var trackerId: UUID?
+    private var indexPath: IndexPath?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -115,16 +119,18 @@ final class TrackerCell: UICollectionViewCell {
         yes ? pinnedImage.isHidden = false : (pinnedImage.isHidden = true)
     }
     
-    func setupCell(tracker: Tracker) {
+    func setupCell(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath) {
+        self.isCompletedToday = isCompletedToday
+        self.trackerId = tracker.id
+        self.indexPath = indexPath
+        
+        updateCounterText(days: completedDays)
+        updatePlusButton(trackerCompleted: isCompletedToday)
+        
         colorView.backgroundColor = tracker.color
         textLabel.text = tracker.name
         emojiLabel.text = tracker.emojie
         plusButton.backgroundColor = tracker.color
-    }
-    
-    func completeTracker(days: Int, isToday: Bool) {
-        updateCounterText(days: days)
-        updatePlusButton(trackerCompleted: isToday)
     }
     
     private func updateCounterText(days: Int) {
@@ -148,34 +154,14 @@ final class TrackerCell: UICollectionViewCell {
         plusButton.layer.opacity = buttonOpacity
     }
     
-    private func findParentViewController() -> UIViewController? {
-        if let nextResponder = self.next as? UIViewController {
-            return nextResponder
-        } else if let nextResponder = self.next as? UIView {
-            return nextResponder.findViewController()
-        } else {
-            return nil
-        }
-    }
-    
-    private func showAlert(_ message: String) {
-        if let parentalViewController = findParentViewController() {
-            let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default)
-            alert.addAction(okAction)
-            parentalViewController.present(alert, animated: true, completion: nil)
-        }
-    }
-    
     // MARK: - Action
     @objc
     private func buttonTapped() {
-        let now = Date()
-        if let trackersViewController = findParentViewController() as? TrackerViewController, trackersViewController.currentDate <= now {
-            guard let delegate = delegate else { return }
-            delegate.plusButtonTapped(on: self)
+        guard let trackerId = trackerId, let indexPath = indexPath else { return }
+        if isCompletedToday {
+            delegate?.uncompletedTracker(id: trackerId, at: indexPath)
         } else {
-            showAlert("Нельзя отмечать трекеры для будущих дат")
+            delegate?.completedTracker(id: trackerId, at: indexPath)
         }
     }
 }
