@@ -59,7 +59,7 @@ final class AddNewCategoryViewController: UIViewController {
         setupTapGestureToDismissKeyboard()
     }
     
-    // MARK: Action
+    // MARK: Selectors
     @objc
     private func saveCategory() {
         guard let text = textField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }

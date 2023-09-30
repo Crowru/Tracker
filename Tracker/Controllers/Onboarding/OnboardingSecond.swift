@@ -60,7 +60,7 @@ final class OnboardingSecond: UIViewController {
     private func performTransitionToTabBar() {
         let tabBarController = TabBarController()
         if let window = UIApplication.shared.windows.first {
-            UIView.transition(with: window, duration: 0.2, options: .transitionCrossDissolve, animations: {
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
                 window.rootViewController = tabBarController
             }, completion: nil)
             window.makeKeyAndVisible()
@@ -69,6 +69,7 @@ final class OnboardingSecond: UIViewController {
     
     // MARK: Selector
     @objc func showTabBar() {
+        UserDefaultsManager.totalTimesLaunching = true
         animateButton {
             self.performTransitionToTabBar()
         }

@@ -21,9 +21,9 @@ private enum WeekDays: String, CaseIterable {
 final class TimetableViewController: UIViewController {
     
     weak var delegate: HabitDelegate?
-    
-    private var timetableSavedArray = UserDefaults.standard.array(forKey: "timetable") as? [String] ?? []
-    
+    private var timetable: [String] = []
+    private var timetableArray = UserDefaultsManager.timetableArray ?? []
+        
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 200), style: .insetGrouped)
         tableView.register(TimetableCell.self, forCellReuseIdentifier: TimetableCell.identifier)
@@ -46,15 +46,13 @@ final class TimetableViewController: UIViewController {
         return button
     }()
     
-    private var timetable: [String] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
     }
     
-    // MARK: Action
+    // MARK: Selectors
     @objc
     private func saveWeekDays() {
         delegate?.addDetailDays(timetable)
@@ -73,8 +71,8 @@ extension TimetableViewController: UITableViewDataSource {
         cell.textLabel?.text = WeekDays.allCases[indexPath.row].rawValue
         cell.backgroundColor = .ypBackgroundDay
         cell.delegateCell = self
-        timetableSavedArray.forEach { day in
-            if day == shortDays(for: (cell.textLabel?.text) ?? "") {
+        timetableArray.forEach { day in
+            if day == "".shortDaysFromLong(for: (cell.textLabel?.text) ?? "") {
                 cell.switchDay.isOn = true
                 didToogleSwitch(for: day, isOn: true)
             }
@@ -87,20 +85,7 @@ extension TimetableViewController: UITableViewDataSource {
 extension TimetableViewController: TimetableCellDelegate {
     func didToogleSwitch(for day: String, isOn: Bool) {
         isOn ? timetable.append(day) : (timetable.removeAll { $0 == day })
-        UserDefaults.standard.set(timetable, forKey: "timetable")
-    }
-    
-    private func shortDays(for day: String) -> String {
-        switch day {
-        case "Понедельник": return "Пн"
-        case "Вторник": return "Вт"
-        case "Среда": return "Ср"
-        case "Четверг": return "Чт"
-        case "Пятница": return "Пт"
-        case "Суббота": return "Сб"
-        case "Воскресенье": return "Вс"
-        default: return ""
-        }
+        UserDefaultsManager.timetableArray = timetable
     }
 }
 

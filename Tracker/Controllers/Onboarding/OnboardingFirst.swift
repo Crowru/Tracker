@@ -8,7 +8,6 @@
 import UIKit
 
 final class OnboardingFirst: UIViewController {
-    
     private let backgroundImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "firstBackground")
@@ -30,7 +29,7 @@ final class OnboardingFirst: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.whiteDay, for: .normal)
         button.layer.cornerRadius = 16
-        button.addTarget(self, action: #selector(showTabBar), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showNextScreen), for: .touchUpInside)
         button.addTarget(self, action: #selector(touchDown), for: .touchDown)
         button.addTarget(self, action: #selector(touchUpOutside), for: .touchUpOutside)
         return button
@@ -59,7 +58,7 @@ final class OnboardingFirst: UIViewController {
     }
     
     // MARK: Selectors
-    @objc func showTabBar() {
+    @objc func showNextScreen() {
         animateButton {
             self.delegate?.didTapNextButton()
         }

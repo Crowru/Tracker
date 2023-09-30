@@ -31,37 +31,30 @@ final class TrackersTypeViewController: UIViewController {
         setupConstraints()
     }
     
-    // MARK: Actions
-    @objc
-    private func addNewHabit() {
-        let habitViewController = NewTrackerViewController()
-        habitViewController.title = "Новая привычка"
-        habitViewController.onTrackerCreated = { [weak self] tracker, titleCategory in
-            guard let self = self else { return }
-            self.delegate?.createTracker(tracker, titleCategory: titleCategory)
+    private func showTrackers(_ isIreggularEvent: Bool, _ title: String) {
+        UserDefaultsManager.showIrregularEvent = isIreggularEvent
+        let newTrackerVC = NewTrackerViewController()
+        newTrackerVC.title = title
+        newTrackerVC.onTrackerCreated = { [weak self] tracker, titleCotegory in
+            guard let self else { return }
+            self.delegate?.createTracker(tracker, titleCategory: titleCotegory)
         }
-        
-        UserDefaults.standard.removeObject(forKey: "timetable")
-        let navigationController = UINavigationController(rootViewController: habitViewController)
-        navigationController.navigationBar.barTintColor = .white
+        let navigationController = UINavigationController(rootViewController: newTrackerVC)
+        navigationController.navigationBar.barTintColor = .whiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }
     
+    // MARK: Selectors
+    @objc
+    private func addNewHabit() {
+        showTrackers(false, "Новая привычка")
+        UserDefaultsManager.timetableArray = []
+    }
+    
     @objc
     private func addIreggularEvent() {
-        let eventViewController = NewTrackerViewController()
-        eventViewController.title = "Новое нерегулярное событие"
-        eventViewController.chooseIrregularEvent = true
-        eventViewController.onTrackerCreated = { [weak self] (tracker, titleCategory) in
-            guard let self else { return }
-            self.delegate?.createTracker(tracker, titleCategory: titleCategory)
-        }
-        
-        let navigationController = UINavigationController(rootViewController: eventViewController)
-        navigationController.navigationBar.barTintColor = .white
-        navigationController.navigationBar.shadowImage = UIImage()
-        present(navigationController, animated: true)
+        showTrackers(true, "Новое нерегулярное событие")
     }
 }
 

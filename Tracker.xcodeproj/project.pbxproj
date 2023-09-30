@@ -26,6 +26,7 @@
 		2A7FD87A2A97FA75003ED0DD /* TrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7FD8792A97FA75003ED0DD /* TrackerCell.swift */; };
 		2AAAAD982AA724F100E6C6CE /* TimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAAAD972AA724F100E6C6CE /* TimetableViewController.swift */; };
 		2AAAAD9A2AA72D2100E6C6CE /* TimetableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAAAD992AA72D2100E6C6CE /* TimetableCell.swift */; };
+		2ACDCA4C2AC48DDA008827A0 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDCA4B2AC48DDA008827A0 /* UserDefaultsManager.swift */; };
 		2AD904D42AC1A12300CBB9E0 /* OnboardingFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD904D32AC1A12300CBB9E0 /* OnboardingFirst.swift */; };
 		2AD904D62AC1A26F00CBB9E0 /* OnboardingSecond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD904D52AC1A26F00CBB9E0 /* OnboardingSecond.swift */; };
 		2AED5D322AA0FB4E0049ACD4 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AED5D312AA0FB4E0049ACD4 /* Tracker.swift */; };
@@ -46,6 +47,7 @@
 		2AED5D532AA64C920049ACD4 /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AED5D522AA64C920049ACD4 /* CategoriesViewController.swift */; };
 		2AED5D552AA6564E0049ACD4 /* AddNewCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AED5D542AA6564E0049ACD4 /* AddNewCategoryViewController.swift */; };
 		2AEFA3052AB8E00D00B15035 /* String + Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AEFA3042AB8E00D00B15035 /* String + Extention.swift */; };
+		2AFF93B02AC8464B00E8695A /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFF93AF2AC8464B00E8695A /* CategoriesViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +73,7 @@
 		2A7FD8792A97FA75003ED0DD /* TrackerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCell.swift; sourceTree = "<group>"; };
 		2AAAAD972AA724F100E6C6CE /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
 		2AAAAD992AA72D2100E6C6CE /* TimetableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableCell.swift; sourceTree = "<group>"; };
+		2ACDCA4B2AC48DDA008827A0 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		2AD904D32AC1A12300CBB9E0 /* OnboardingFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirst.swift; sourceTree = "<group>"; };
 		2AD904D52AC1A26F00CBB9E0 /* OnboardingSecond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSecond.swift; sourceTree = "<group>"; };
 		2AED5D312AA0FB4E0049ACD4 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
@@ -91,6 +94,7 @@
 		2AED5D522AA64C920049ACD4 /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		2AED5D542AA6564E0049ACD4 /* AddNewCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewCategoryViewController.swift; sourceTree = "<group>"; };
 		2AEFA3042AB8E00D00B15035 /* String + Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + Extention.swift"; sourceTree = "<group>"; };
+		2AFF93AF2AC8464B00E8695A /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,8 +191,6 @@
 				2A68040C2AB358CD0067DB79 /* TrackerCategoryStore.swift */,
 				2A0B39AF2AB7157B00276B79 /* TrackerCategoryStoreUpdate.swift */,
 				2A68040E2AB358DB0067DB79 /* TrackerRecordStore.swift */,
-				2A0B39AD2AB63F7C00276B79 /* WeekdaysMarshalling.swift */,
-				2A6804122AB38A7F0067DB79 /* UIColorMarshalling.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -214,7 +216,7 @@
 			children = (
 				2A12A2B72A9A2B370024B3E4 /* Application */,
 				2AED5D302AA0FB340049ACD4 /* Models */,
-				2AED5D332AA109F00049ACD4 /* Extension */,
+				2ACDCA4A2AC48D89008827A0 /* Helpers */,
 				2A6804092AB3588E0067DB79 /* Domain */,
 				2A6804082AB353820067DB79 /* CoreData */,
 				2A12A2B82A9A631C0024B3E4 /* Controllers */,
@@ -230,6 +232,17 @@
 				2AAAAD992AA72D2100E6C6CE /* TimetableCell.swift */,
 			);
 			path = Timetable;
+			sourceTree = "<group>";
+		};
+		2ACDCA4A2AC48D89008827A0 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				2AED5D332AA109F00049ACD4 /* Extension */,
+				2A6804122AB38A7F0067DB79 /* UIColorMarshalling.swift */,
+				2A0B39AD2AB63F7C00276B79 /* WeekdaysMarshalling.swift */,
+				2ACDCA4B2AC48DDA008827A0 /* UserDefaultsManager.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		2AED5D302AA0FB340049ACD4 /* Models */ = {
@@ -274,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				2AED5D522AA64C920049ACD4 /* CategoriesViewController.swift */,
+				2AFF93AF2AC8464B00E8695A /* CategoriesViewModel.swift */,
 				2AED5D542AA6564E0049ACD4 /* AddNewCategoryViewController.swift */,
 			);
 			path = Categories;
@@ -371,8 +385,10 @@
 				2AED5D532AA64C920049ACD4 /* CategoriesViewController.swift in Sources */,
 				2AD904D62AC1A26F00CBB9E0 /* OnboardingSecond.swift in Sources */,
 				2A12A2BC2A9A74200024B3E4 /* StatisticViewController.swift in Sources */,
+				2AFF93B02AC8464B00E8695A /* CategoriesViewModel.swift in Sources */,
 				2AED5D352AA10A1D0049ACD4 /* UIView + Extension.swift in Sources */,
 				2AED5D442AA2599A0049ACD4 /* HeaderViewCell.swift in Sources */,
+				2ACDCA4C2AC48DDA008827A0 /* UserDefaultsManager.swift in Sources */,
 				2AED5D422AA248270049ACD4 /* GeometryParams.swift in Sources */,
 				2AED5D482AA5DD2C0049ACD4 /* SubtitledTableViewCell.swift in Sources */,
 				2A12A2B42A9A2AF10024B3E4 /* TabBarController.swift in Sources */,

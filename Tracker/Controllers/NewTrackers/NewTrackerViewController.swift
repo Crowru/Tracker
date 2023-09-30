@@ -49,9 +49,7 @@ final class NewTrackerViewController: UIViewController {
         label.isHidden = true
         return label
     }()
-    
-    var chooseIrregularEvent: Bool = false
-    
+        
     var onTrackerCreated: ((_ tracker: Tracker, _ titleCategory: String?) -> Void)?
     
     private lazy var textField: UITextField = {
@@ -179,7 +177,7 @@ final class NewTrackerViewController: UIViewController {
         view.endEditing(true)
     }
     
-    // MARK: Actions
+    // MARK: Selectors
     @objc
     private func createNewTracker() {
         guard let text = textField.text, let category = detailTextCategory else { return }
@@ -187,7 +185,7 @@ final class NewTrackerViewController: UIViewController {
         let emojie = emojies[selectedEmojieIndexPath.row]
         let color = colors[selectedColorIndexPath.row]
         
-        if chooseIrregularEvent {
+        if UserDefaultsManager.showIrregularEvent ?? true {
             let newTracker = Tracker(id: UUID(), name: text, color: color, emojie: emojie, timetable: nil)
             onTrackerCreated?(newTracker, category)
         } else {
@@ -241,8 +239,8 @@ extension NewTrackerViewController: UITextFieldDelegate {
 // MARK: - UITableViewDataSource
 extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        chooseIrregularEvent ? (isEnabledDictionary["timetable"] = true) : (isEnabledDictionary["timetable"] = false)
-        return chooseIrregularEvent ? 1 : 2
+        UserDefaultsManager.showIrregularEvent == true ? (isEnabledDictionary["timetable"] = true) : (isEnabledDictionary["timetable"] = false)
+        return UserDefaultsManager.showIrregularEvent == true ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

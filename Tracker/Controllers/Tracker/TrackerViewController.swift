@@ -113,11 +113,10 @@ final class TrackerViewController: UIViewController {
             let dateButton = UIBarButtonItem(customView: datePicker)
             
             navBar.topItem?.setRightBarButton(dateButton, animated: true)
-            //navigationItem.hidesSearchBarWhenScrolling = false
         }
     }
     
-    // MARK: Actions
+    // MARK: Selectors
     @objc
     private func handleRefresh(_ sender: UIRefreshControl) {
         sender.endRefreshing()

@@ -31,7 +31,7 @@ final class TimetableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Action
+    // MARK: Selectors
     @objc
     private func switchTapped(_ sender: UISwitch) {
         if let daysOfWeek = textLabel?.text {

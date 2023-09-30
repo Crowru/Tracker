@@ -12,7 +12,6 @@ protocol OnboardingPageDelegate: AnyObject {
 }
 
 final class OnboardingViewController: UIPageViewController {
-        
     private let pageControl = UIPageControl()
     
     lazy var pages: [UIViewController] = {
@@ -64,7 +63,7 @@ final class OnboardingViewController: UIPageViewController {
             }
             if let currentIndex = pages.firstIndex(of: currentViewController) {
                 let direction: UIPageViewController.NavigationDirection = tappedPageIndex > currentIndex ? .forward : .reverse
-                setViewControllers([targetPage], direction: direction, animated: true, completion: nil)
+                self.setViewControllers([targetPage], direction: direction, animated: true, completion: nil)
             }
         }
     }

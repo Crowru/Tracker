@@ -13,9 +13,7 @@ protocol AddNewСategoryViewControllerDelegate: AnyObject {
 }
 
 final class CategoriesViewController: UIViewController {
-    
-    private let userDefaults = UserDefaults.standard
-    
+        
     weak var delegate: HabitDelegate?
     
     private lazy var tableView: UITableView = {
@@ -42,48 +40,28 @@ final class CategoriesViewController: UIViewController {
         return button
     }()
     
-    private var categories: [String] {
-        get {
-            if let savedData = UserDefaults.standard.data(forKey: "categories"),
-               let loadedArray = try? JSONDecoder().decode([String].self, from: savedData) {
-                return loadedArray
-            } else {
-                return [String]()
-            }
-        } set {
-            let newData = try? JSONEncoder().encode(newValue)
-            UserDefaults.standard.set(newData, forKey: "categories")
-            UserDefaults.standard.synchronize()
-        }
-    }
+    private var categories: [String] = []
     
     private var editingIndexPath: IndexPath? {
         didSet {
-            guard let indexPath = editingIndexPath else { return }
-            let selectedRow = indexPath.row
-            userDefaults.set(selectedRow, forKey: "editingIndexPath")
-            userDefaults.synchronize()
+            UserDefaultsManager.editingIndexPath = editingIndexPath?.row
         }
     }
     
     // MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        savedRow()
+        dataIndexesCategories()
         setupViews()
         updateTableView()
     }
     
-    private func savedRow() {
-        if let savedRow = userDefaults.object(forKey: "editingIndexPath") as? Int {
-            editingIndexPath = IndexPath(row: savedRow, section: 0)
-        }
-    }
-    
-    // MARK: Action
-    @objc
-    private func addNewCategory() {
-        goToAddNewCategory(isEdit: false)
+    // MARK: Functions
+    private func dataIndexesCategories() {
+        guard let row = UserDefaultsManager.editingIndexPath else { return }
+        editingIndexPath = IndexPath(row: row, section: 0)
+        guard let categoriesArray = UserDefaultsManager.categoriesArray else { return }
+        categories = categoriesArray
     }
     
     private func goToAddNewCategory(isEdit: Bool = false, text: String? = nil) {
@@ -109,6 +87,12 @@ final class CategoriesViewController: UIViewController {
             tableView.backgroundView = nil
         }
         tableView.reloadData()
+    }
+    
+    // MARK: Selectors
+    @objc
+    private func addNewCategory() {
+        goToAddNewCategory(isEdit: false)
     }
 }
 
@@ -136,6 +120,7 @@ extension CategoriesViewController: UITableViewDataSource {
                    forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             categories.remove(at: indexPath.row)
+            UserDefaultsManager.categoriesArray = categories
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
@@ -176,6 +161,7 @@ extension CategoriesViewController: UITableViewDelegate {
         let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
             guard let self = self else { return }
             self.categories.remove(at: indexPath.row)
+            UserDefaultsManager.categoriesArray = categories
             self.updateTableView()
         }
         
@@ -197,6 +183,7 @@ extension CategoriesViewController: AddNewСategoryViewControllerDelegate {
     
     func addCategory(_ text: String) {
         categories.append(text)
+        UserDefaultsManager.categoriesArray = categories
         updateTableView()
     }
 }
