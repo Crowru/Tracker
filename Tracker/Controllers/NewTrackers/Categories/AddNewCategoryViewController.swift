@@ -8,6 +8,11 @@
 import UIKit
 
 final class AddNewCategoryViewController: UIViewController {
+    var isEdit: Bool = false
+    var editText: String?
+    
+    weak var delegate: AddNewСategoryViewControllerDelegate?
+    
     private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 30))
@@ -34,18 +39,9 @@ final class AddNewCategoryViewController: UIViewController {
         return button
     }()
     
-    private weak var delegate: AddNewСategoryViewControllerDelegate?
-    
-    private let isEdit: Bool
-    private let editText: String?
-    
-    // MARK: Initialisation
-    init(isEdit: Bool, editText: String?, delegate: AddNewСategoryViewControllerDelegate) {
-        self.isEdit = isEdit
-        self.editText = editText
-        self.delegate = delegate
+    init() {
         super.init(nibName: nil, bundle: nil)
-        title = isEdit ? "Редактировать" : "Новая категория"
+        title = isEdit ? "Новая категория" : "Редактирование"
     }
     
     required init?(coder: NSCoder) {
@@ -128,9 +124,7 @@ extension AddNewCategoryViewController: UITextFieldDelegate {
 // MARK: - SetupViews
 extension AddNewCategoryViewController {
     private func setupViews() {
-        title = isEdit ? "Редактировать" : "Новая категория"
         view.backgroundColor = .white
-        
         view.addSubviews(textField, doneButton)
         
         NSLayoutConstraint.activate([

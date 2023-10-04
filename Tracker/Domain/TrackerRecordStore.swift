@@ -9,7 +9,6 @@ import UIKit
 import CoreData
 
 final class TrackerRecordStore: NSObject {
-    // MARK: Properties
     private let context: NSManagedObjectContext
     
     // MARK: FetchedResultController
@@ -34,13 +33,13 @@ final class TrackerRecordStore: NSObject {
     
     // MARK: Initialisation
     convenience override init() {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                let context = appDelegate.persistantContainer.viewContext
-                self.init(context: context)
-            } else {
-                fatalError("Unable to access the AppDelegate")
-            }
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let context = appDelegate.persistantContainer.viewContext
+            self.init(context: context)
+        } else {
+            fatalError("Unable to access the AppDelegate")
         }
+    }
     init(context: NSManagedObjectContext) {
         self.context = context
         super.init()
@@ -82,17 +81,4 @@ final class TrackerRecordStore: NSObject {
             contextSave()
         }
     }
-    
-//    func deleteTrackerRecord(with id: UUID) {
-//        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
-//        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerRecordCoreData.trackerId), id.uuidString)
-//        guard let trackerRecords = try? context.fetch(request) else {
-//            assertionFailure("Enabled to fetch(request)")
-//            return
-//        }
-//        if let trackerRecordDelete = trackerRecords.first {
-//            context.delete(trackerRecordDelete)
-//            contextSave()
-//        }
-//    }
 }

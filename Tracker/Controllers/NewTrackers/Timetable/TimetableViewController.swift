@@ -20,7 +20,7 @@ private enum WeekDays: String, CaseIterable {
 
 final class TimetableViewController: UIViewController {
     
-    weak var delegate: HabitDelegate?
+    weak var delegate: NewTrackerViewControllerProtocol?
     private var timetable: [String] = []
     private var timetableArray = UserDefaultsManager.timetableArray ?? []
         

@@ -7,13 +7,12 @@
 
 import UIKit
 
-//MARK: - HabitDelegate
-protocol HabitDelegate: AnyObject {
+//MARK: - NewTrackerViewControllerProtocol
+protocol NewTrackerViewControllerProtocol: AnyObject {
     func addDetailCategory(_ text: String)
     func addDetailDays(_ days: [String])
 }
 
-//MARK: - NewTrackerViewController
 final class NewTrackerViewController: UIViewController {
     
     private let namesButton: [String] = ["Категория", "Расписание"]
@@ -284,7 +283,6 @@ extension NewTrackerViewController: UITableViewDataSource {
         default:
             break
         }
-        
         return cell
     }
     
@@ -298,25 +296,26 @@ extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         dismissKeyboard()
-        if indexPath.row == 0 {
-            let categoriesViewController = CategoriesViewController()
-            categoriesViewController.delegate = self
-            categoriesViewController.title = "Категория"
-            
-            let navigationController = UINavigationController(rootViewController: categoriesViewController)
-            navigationController.navigationBar.barTintColor = .white
-            navigationController.navigationBar.shadowImage = UIImage()
-            present(navigationController, animated: true)
-        } else if indexPath.row == 1 {
-            let timetableViewController = TimetableViewController()
-            timetableViewController.delegate = self
-            timetableViewController.title = "Расписание"
-            
-            let navigationController = UINavigationController(rootViewController: timetableViewController)
-            navigationController.navigationBar.barTintColor = .white
-            navigationController.navigationBar.shadowImage = UIImage()
-            present(navigationController, animated: true)
+        switch indexPath.row {
+        case 0: let viewController = CategoriesViewController()
+            chooseCategoryVC(viewController, "Категория")
+            let categoryViewModel = CategoriesViewModel()
+            viewController.initialize(viewModel: categoryViewModel)
+            categoryViewModel.delegate = self
+        case 1: let viewController = TimetableViewController()
+            chooseCategoryVC(viewController, "Расписание")
+            viewController.delegate = self
+        default: break
         }
+    }
+    
+    private func chooseCategoryVC(_ viewController: UIViewController, _ title: String) {
+        let viewController = viewController
+        viewController.title = title
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.navigationBar.barTintColor = .whiteDay
+        navigationController.navigationBar.shadowImage = UIImage()
+        present(navigationController, animated: true)
     }
 }
 
@@ -450,8 +449,8 @@ extension NewTrackerViewController: UICollectionViewDelegate & UICollectionViewD
     }
 }
 
-// MARK: - HabitDelegate
-extension NewTrackerViewController: HabitDelegate {
+// MARK: - NewTrackerViewControllerProtocol
+extension NewTrackerViewController: NewTrackerViewControllerProtocol {
     func addDetailCategory(_ text: String) {
         detailTextCategory = text
         tableView.reloadData()

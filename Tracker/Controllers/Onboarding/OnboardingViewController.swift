@@ -9,10 +9,13 @@ import UIKit
 
 protocol OnboardingPageDelegate: AnyObject {
     func didTapNextButton()
+    var currentPageIndex: Int { get set }
 }
 
 final class OnboardingViewController: UIPageViewController {
     private let pageControl = UIPageControl()
+    
+    var currentPageIndex = 0
     
     lazy var pages: [UIViewController] = {
         let pageOne = OnboardingFirst()
@@ -22,6 +25,8 @@ final class OnboardingViewController: UIPageViewController {
         
         return [pageOne, pageTwo]
     }()
+    
+    private var isAnimating = false
     
     init(transitionStyle: UIPageViewController.TransitionStyle) {
         super.init(transitionStyle: transitionStyle, navigationOrientation: .horizontal, options: nil)
@@ -54,19 +59,34 @@ final class OnboardingViewController: UIPageViewController {
     }
     
     // MARK: Selectors
+    
     @objc func pageControlTapped(_ sender: UIPageControl) {
         let tappedPageIndex = sender.currentPage
-        if tappedPageIndex >= 0 && tappedPageIndex < pages.count {
-            let targetPage = pages[tappedPageIndex]
-            guard let currentViewController = viewControllers?.first else {
-                return
-            }
-            if let currentIndex = pages.firstIndex(of: currentViewController) {
-                let direction: UIPageViewController.NavigationDirection = tappedPageIndex > currentIndex ? .forward : .reverse
-                self.setViewControllers([targetPage], direction: direction, animated: true, completion: nil)
+        
+        if isAnimating {
+            return
+        }
+        
+        if tappedPageIndex != currentPageIndex {
+            if tappedPageIndex >= 0 && tappedPageIndex < pages.count {
+                let targetPage = pages[tappedPageIndex]
+                guard let currentViewController = viewControllers?.first else {
+                    return
+                }
+                if let currentIndex = pages.firstIndex(of: currentViewController) {
+                    let direction: UIPageViewController.NavigationDirection = tappedPageIndex > currentIndex ? .forward : .reverse
+                    
+                    isAnimating = true
+                    
+                    self.setViewControllers([targetPage], direction: direction, animated: true) { [weak self] _ in
+                        self?.isAnimating = false
+                        self?.currentPageIndex = tappedPageIndex
+                    }
+                }
             }
         }
     }
+
 }
 
 // MARK: - UIPageViewControllerDataSource
@@ -78,8 +98,10 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
         let previousIndex = viewControllerIndex - 1
 
         guard previousIndex >= 0 else {
+            currentPageIndex = previousIndex
             return pages.last
         }
+        
         return pages[previousIndex]
     }
 
@@ -90,8 +112,10 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
         let nextIndex = viewControllerIndex + 1
 
         guard nextIndex < pages.count else {
+            currentPageIndex = nextIndex
             return pages.first
         }
+        
         return pages[nextIndex]
     }
 }
@@ -125,6 +149,7 @@ extension OnboardingViewController: OnboardingPageDelegate {
                 pageControl.currentPage = nextIndex
             }
         }
+        currentPageIndex = 1
     }
 }
 

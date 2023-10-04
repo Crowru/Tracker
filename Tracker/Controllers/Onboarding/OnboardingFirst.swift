@@ -46,14 +46,17 @@ final class OnboardingFirst: UIViewController {
     
     // MARK: Functions
     private func animateButton(completion: @escaping () -> Void) {
-        UIView.animate(withDuration: 0.1, animations: { [weak self] in
-            self?.tapButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-        }) { [weak self] _ in
-            UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear, animations: {
-                self?.tapButton.transform = CGAffineTransform.identity
-            }, completion: { _ in
-                completion()
-            })
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            UIView.animate(withDuration: 0.1, animations: {
+                self.tapButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            }) { _ in
+                UIView.animate(withDuration: 0.1, delay: 0, options: .curveLinear, animations: {
+                    self.tapButton.transform = CGAffineTransform.identity
+                }, completion: { _ in
+                    completion()
+                })
+            }
         }
     }
     
