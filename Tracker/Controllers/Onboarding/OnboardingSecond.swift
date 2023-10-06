@@ -17,17 +17,17 @@ final class OnboardingSecond: UIViewController {
         let label = UILabel()
         label.text = "Даже если это не литры воды и йога"
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.textColor = .blackDay
+        label.textColor = .ypBlackDay
         label.numberOfLines = 2
         label.textAlignment = .center
         return label
     }()
     private lazy var tapButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .blackDay
+        button.backgroundColor = .ypBlackDay
         button.setTitle("Вот это технологии!", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        button.setTitleColor(.whiteDay, for: .normal)
+        button.setTitleColor(.ypWhiteDay, for: .normal)
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(showTabBar), for: .touchUpInside)
         button.addTarget(self, action: #selector(touchDown), for: .touchDown)

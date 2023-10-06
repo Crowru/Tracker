@@ -313,7 +313,7 @@ extension NewTrackerViewController: UITableViewDelegate {
         let viewController = viewController
         viewController.title = title
         let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.navigationBar.barTintColor = .whiteDay
+        navigationController.navigationBar.barTintColor = .ypWhiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }

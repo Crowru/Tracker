@@ -58,7 +58,7 @@ final class CategoriesViewController: UIViewController {
     private func goToAddNewCategory(isEdit: Bool = false, text: String? = nil) {
         guard let addNewCategoryViewController = viewModel?.addNewCategory(isEdit: isEdit, text: text) else { return }
         let navigationController = UINavigationController(rootViewController: addNewCategoryViewController)
-        navigationController.navigationBar.barTintColor = .whiteDay
+        navigationController.navigationBar.barTintColor = .ypWhiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }

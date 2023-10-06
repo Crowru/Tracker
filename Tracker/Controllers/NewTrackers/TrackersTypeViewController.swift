@@ -40,7 +40,7 @@ final class TrackersTypeViewController: UIViewController {
             self.delegate?.createTracker(tracker, titleCategory: titleCotegory)
         }
         let navigationController = UINavigationController(rootViewController: newTrackerVC)
-        navigationController.navigationBar.barTintColor = .whiteDay
+        navigationController.navigationBar.barTintColor = .ypWhiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }
