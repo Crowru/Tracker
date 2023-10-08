@@ -7,13 +7,12 @@
 
 import UIKit
 
-//MARK: - HabitDelegate
-protocol HabitDelegate: AnyObject {
+//MARK: - NewTrackerViewControllerProtocol
+protocol NewTrackerViewControllerProtocol: AnyObject {
     func addDetailCategory(_ text: String)
     func addDetailDays(_ days: [String])
 }
 
-//MARK: - NewTrackerViewController
 final class NewTrackerViewController: UIViewController {
     
     private let namesButton: [String] = ["Категория", "Расписание"]
@@ -49,9 +48,7 @@ final class NewTrackerViewController: UIViewController {
         label.isHidden = true
         return label
     }()
-    
-    var chooseIrregularEvent: Bool = false
-    
+        
     var onTrackerCreated: ((_ tracker: Tracker, _ titleCategory: String?) -> Void)?
     
     private lazy var textField: UITextField = {
@@ -179,17 +176,7 @@ final class NewTrackerViewController: UIViewController {
         view.endEditing(true)
     }
     
-    private func hideKeybooardWhenClickAnywhere() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardWhenClickAnywhere))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    // MARK: Actions
-    @objc func dismissKeyboardWhenClickAnywhere() {
-        view.endEditing(true)
-    }
-    
+    // MARK: Selectors
     @objc
     private func createNewTracker() {
         guard let text = textField.text, let category = detailTextCategory else { return }
@@ -197,7 +184,7 @@ final class NewTrackerViewController: UIViewController {
         let emojie = emojies[selectedEmojieIndexPath.row]
         let color = colors[selectedColorIndexPath.row]
         
-        if chooseIrregularEvent {
+        if UserDefaultsManager.showIrregularEvent ?? true {
             let newTracker = Tracker(id: UUID(), name: text, color: color, emojie: emojie, timetable: nil)
             onTrackerCreated?(newTracker, category)
         } else {
@@ -251,8 +238,8 @@ extension NewTrackerViewController: UITextFieldDelegate {
 // MARK: - UITableViewDataSource
 extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        chooseIrregularEvent ? (isEnabledDictionary["timetable"] = true) : (isEnabledDictionary["timetable"] = false)
-        return chooseIrregularEvent ? 1 : 2
+        UserDefaultsManager.showIrregularEvent == true ? (isEnabledDictionary["timetable"] = true) : (isEnabledDictionary["timetable"] = false)
+        return UserDefaultsManager.showIrregularEvent == true ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -296,7 +283,6 @@ extension NewTrackerViewController: UITableViewDataSource {
         default:
             break
         }
-        
         return cell
     }
     
@@ -310,25 +296,26 @@ extension NewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         dismissKeyboard()
-        if indexPath.row == 0 {
-            let categoriesViewController = CategoriesViewController()
-            categoriesViewController.delegate = self
-            categoriesViewController.title = "Категория"
-            
-            let navigationController = UINavigationController(rootViewController: categoriesViewController)
-            navigationController.navigationBar.barTintColor = .white
-            navigationController.navigationBar.shadowImage = UIImage()
-            present(navigationController, animated: true)
-        } else if indexPath.row == 1 {
-            let timetableViewController = TimetableViewController()
-            timetableViewController.delegate = self
-            timetableViewController.title = "Расписание"
-            
-            let navigationController = UINavigationController(rootViewController: timetableViewController)
-            navigationController.navigationBar.barTintColor = .white
-            navigationController.navigationBar.shadowImage = UIImage()
-            present(navigationController, animated: true)
+        switch indexPath.row {
+        case 0: let viewController = CategoriesViewController()
+            chooseCategoryVC(viewController, "Категория")
+            let categoryViewModel = CategoriesViewModel()
+            viewController.initialize(viewModel: categoryViewModel)
+            categoryViewModel.delegate = self
+        case 1: let viewController = TimetableViewController()
+            chooseCategoryVC(viewController, "Расписание")
+            viewController.delegate = self
+        default: break
         }
+    }
+    
+    private func chooseCategoryVC(_ viewController: UIViewController, _ title: String) {
+        let viewController = viewController
+        viewController.title = title
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.navigationBar.barTintColor = .ypWhiteDay
+        navigationController.navigationBar.shadowImage = UIImage()
+        present(navigationController, animated: true)
     }
 }
 
@@ -462,8 +449,8 @@ extension NewTrackerViewController: UICollectionViewDelegate & UICollectionViewD
     }
 }
 
-// MARK: - HabitDelegate
-extension NewTrackerViewController: HabitDelegate {
+// MARK: - NewTrackerViewControllerProtocol
+extension NewTrackerViewController: NewTrackerViewControllerProtocol {
     func addDetailCategory(_ text: String) {
         detailTextCategory = text
         tableView.reloadData()
@@ -486,8 +473,7 @@ extension NewTrackerViewController: UIScrollViewDelegate {
 // MARK: - SetupViews
 private extension NewTrackerViewController {
     func setupView() {
-        hideKeybooardWhenClickAnywhere()
-        
+        _ = self.hideKeyboardWhenClicked
         view.backgroundColor = .white
         view.addSubviews(scrollView)
         scrollView.addSubviews(contentView)

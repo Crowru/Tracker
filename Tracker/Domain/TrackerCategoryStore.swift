@@ -88,6 +88,17 @@ final class TrackerCategoryStore: NSObject {
             throw TrackerCategoryStoreError.decodingErrorInvalidCategoryModel
         }
     }
+    
+    func createCategory(_ category: TrackerCategory) throws {
+        guard let entity = NSEntityDescription.entity(forEntityName: "TrackerCategoryCoreData", in: context) else { return }
+        let categoryEntity = TrackerCategoryCoreData(entity: entity, insertInto: context)
+
+        categoryEntity.titleCategory = category.title
+        categoryEntity.trackers = NSSet(array: [])
+
+        try context.save()
+    }
+    
     // MARK: - CRUD
     func createTrackerWithCategory(tracker: Tracker, with titleCategory: String) throws {
         let trackerCoreData = try trackerStore.createTracker(from: tracker)
@@ -107,6 +118,19 @@ final class TrackerCategoryStore: NSObject {
         } catch {
             print("Unable to save category. Error: \(error), \(error.localizedDescription)")
         }
+    }
+    
+    func updateCategory(_ oldCategory: TrackerCategory, with newTitle: String) throws {
+        let request: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.titleCategory), oldCategory.title)
+        
+        let result = try context.fetch(request)
+
+        if let categoryEntity = result.first {
+            categoryEntity.titleCategory = newTitle
+        }
+        
+        try context.save()
     }
 
     func deleteCategory(with title: String) throws {

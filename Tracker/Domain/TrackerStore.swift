@@ -73,6 +73,15 @@ final class TrackerStore: NSObject {
         )
     }
     
+    private func contextSave() {
+        do {
+            try context.save()
+        } catch {
+            let error = error as NSError
+            assertionFailure(error.localizedDescription)
+        }
+    }
+    
     // MARK: - CRUD
     func createTracker(from tracker: Tracker) throws -> TrackerCoreData {
         let trackerCoreData = TrackerCoreData(context: context)
@@ -84,18 +93,14 @@ final class TrackerStore: NSObject {
         return trackerCoreData
     }
     
-    func deleteTracker(with id: UUID) throws {
+    func deleteTracker(tracker: Tracker) {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), id.uuidString)
-        let trackers = try context.fetch(request)
-        if let trackerDelete = trackers.first {
-            context.delete(trackerDelete)
-            do {
-                try context.save()
-            } catch {
-                print("Failed to save context after deleting tracker: \(error)")
-                throw error
-            }
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), tracker.id.uuidString)
+        guard let trackerRecords = try? context.fetch(request) else {
+            assertionFailure("Enabled to fetch(request)")
+            return
         }
+        context.delete(trackerRecords.first!)
+        contextSave()
     }
 }
