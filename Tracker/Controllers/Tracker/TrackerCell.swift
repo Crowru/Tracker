@@ -134,17 +134,9 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     private func updateCounterText(days: Int) {
-        let lastDigit = days % 10
-        let lastTwoDigits = days % 100
-        
-        switch lastDigit {
-        case 1 where lastTwoDigits != 11:
-            counterLabel.text = "\(days) день"
-        case 2...4 where !(12...14 ~= lastTwoDigits):
-            counterLabel.text = "\(days) дня"
-        default:
-            counterLabel.text = "\(days) дней"
-        }
+        let tasksString = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfTasks", comment: "Number of remaining tasks"), days)
+        counterLabel.text = tasksString
     }
     
     private func updatePlusButton(trackerCompleted: Bool) {
