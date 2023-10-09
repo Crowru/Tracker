@@ -86,7 +86,6 @@ final class OnboardingViewController: UIPageViewController {
             }
         }
     }
-
 }
 
 // MARK: - UIPageViewControllerDataSource

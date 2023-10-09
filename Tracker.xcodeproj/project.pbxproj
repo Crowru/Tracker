@@ -152,8 +152,8 @@
 				2A06A8222AC20D3100FFB324 /* Onboarding */,
 				2A12A2B22A9A2AD90024B3E4 /* TabBarController */,
 				2A12A2B52A9A2AFF0024B3E4 /* Tracker */,
-				2A12A2BA2A9A73F50024B3E4 /* Statistic */,
 				2AED5D382AA212E20049ACD4 /* NewTrackers */,
+				2A12A2BA2A9A73F50024B3E4 /* Statistic */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
