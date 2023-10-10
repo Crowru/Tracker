@@ -24,7 +24,7 @@ final class CategoriesViewController: UIViewController {
     
     private lazy var addCategoryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(LocalizableKeys.addCategoryButton, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .ypBlackDay
         button.layer.cornerRadius = 16
@@ -72,7 +72,7 @@ final class CategoriesViewController: UIViewController {
                 y: 0,
                 width: view.bounds.width,
                 height: view.bounds.height), image: image,
-                                      text: "Привычки и события можно\nобъединить по смыслу")
+                                      text: LocalizableKeys.trackerViewStubCategory)
             tableView.backgroundView = emptyView
         } else {
             tableView.backgroundView = nil
@@ -134,13 +134,13 @@ extension CategoriesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         viewModel?.editingIndexPath = indexPath
-        let editAction = UIAction(title: "Редактировать") { [weak self] _ in
+        let editAction = UIAction(title: LocalizableKeys.contextMenuCategoryEdit) { [weak self] _ in
             guard let self else { return }
             if let editText = viewModel?.changeCategoryText() {
                 self.goToAddNewCategory(isEdit: true, text: editText)
             }
         }
-        let deleteAction = UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+        let deleteAction = UIAction(title: LocalizableKeys.contextMenuCategoryDelete, attributes: .destructive) { [weak self] _ in
             guard let self = self else { return }
             self.viewModel?.deleteCategories(indexPath: indexPath)
         }

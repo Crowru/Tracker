@@ -15,7 +15,7 @@ final class OnboardingFirst: UIViewController {
     }()
     private let labelOnboarding: UILabel = {
         let label = UILabel()
-        label.text = "Отслеживайте только то, что хотите"
+        label.text = LocalizableKeys.labelOnboardingFirst
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textColor = .ypBlackDay
         label.numberOfLines = 2
@@ -25,7 +25,7 @@ final class OnboardingFirst: UIViewController {
     private lazy var tapButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlackDay
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(LocalizableKeys.buttonOnboarding, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhiteDay, for: .normal)
         button.layer.cornerRadius = 16

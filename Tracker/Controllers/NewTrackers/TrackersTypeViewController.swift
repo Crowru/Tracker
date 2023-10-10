@@ -11,14 +11,14 @@ final class TrackersTypeViewController: UIViewController {
     
     private lazy var habitButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(LocalizableKeys.chooseTrackerButton, for: .normal)
         button.addTarget(self, action: #selector(addNewHabit), for: .touchUpInside)
         return button
     }()
     
     private lazy var irregularEventButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(LocalizableKeys.showIrregularEventButton, for: .normal)
         button.addTarget(self, action: #selector(addIreggularEvent), for: .touchUpInside)
         return button
     }()
@@ -48,13 +48,13 @@ final class TrackersTypeViewController: UIViewController {
     // MARK: Selectors
     @objc
     private func addNewHabit() {
-        showTrackers(false, "Новая привычка")
+        showTrackers(false, LocalizableKeys.showTrackerButton)
         UserDefaultsManager.timetableArray = []
     }
     
     @objc
     private func addIreggularEvent() {
-        showTrackers(true, "Новое нерегулярное событие")
+        showTrackers(true, LocalizableKeys.showIrregularEventButton)
     }
 }
 

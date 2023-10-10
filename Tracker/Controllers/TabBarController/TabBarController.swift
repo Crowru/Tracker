@@ -30,13 +30,13 @@ final class TabBarController: UITabBarController {
     
     private func generateTabBar() {
         mainTrackerViewController.tabBarItem = UITabBarItem(
-            title: "Трекеры",
+            title: LocalizableKeys.trackersTabBarItem,
             image: UIImage(named: "trackersIcon"),
             selectedImage: nil
         )
         
         statisticViewController.tabBarItem = UITabBarItem(
-            title: "Статистика",
+            title: LocalizableKeys.statisticsTabBarItem,
             image: UIImage(named: "statisticIcon"),
             selectedImage: nil
         )

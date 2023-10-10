@@ -35,22 +35,8 @@ final class TimetableCell: UITableViewCell {
     @objc
     private func switchTapped(_ sender: UISwitch) {
         if let daysOfWeek = textLabel?.text {
-            let shortDay = shortDays(for: daysOfWeek)
+            let shortDay = WeekDays[daysOfWeek]
             delegateCell?.didToogleSwitch(for: shortDay, isOn: sender.isOn)
-        }
-    }
-    
-    // MARK: Shorten the Days
-    private func shortDays(for day: String) -> String {
-        switch day {
-        case "Понедельник": return "Пн"
-        case "Вторник": return "Вт"
-        case "Среда": return "Ср"
-        case "Четверг": return "Чт"
-        case "Пятница": return "Пт"
-        case "Суббота": return "Сб"
-        case "Воскресенье": return "Вс"
-        default: return ""
         }
     }
 }

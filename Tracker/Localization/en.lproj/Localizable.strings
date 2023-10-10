@@ -1,0 +1,90 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Руслан  on 10.10.2023.
+  
+*/
+
+"labelOnboardingFirst" = "Track only what you want";
+"labelOnboardingSecond" = "Even if it's not gallons of water and yoga";
+"buttonOnboarding" = "These are technologies!";
+
+"trackersTabBarItem" = "Trackers";
+"statisticsTabBarItem" = "Statistics";
+
+"trackersNavigationItem" = "Trackers";
+
+"chooseTypeOfTracker" = "Creating a tracker";
+
+"pinTracker" = "Pin";
+"unpinTracker" = "Unpin";
+"editTracker" = "Edit";
+"deleteTracker" = "Delete";
+
+"searchBarPlaceholder" = "Search";
+"searchBarCancel" = "Cancel";
+
+"createTrackerAlert" = "Unable to create a tracker";
+
+"searchErrorStub" = "Nothing found";
+"emptyErrorStub" = "What will we track?";
+
+"completedTrackersAlert" = "You can't mark trackers for future dates";
+
+"chooseTrackerButton" = "Tracker";
+"chooseIrregularEventButton" = "Irregular event";
+
+"showTrackerButton" = "A new tracker";
+"showIrregularEventButton" = "New irregular event";
+
+"newTrackerCategory" = "Category";
+"newTrackerTimetable" = "Timetable";
+
+"newTrackerlimitLabel" = "Limit of 38 characters";
+
+"newTrackerTextField" = "Enter the name of the tracker";
+
+"newTrackerCancelButton" = "Cancel";
+"newTrackerCreateButton" = "Create";
+
+"detailTextLabelEveryDay" = "Every day";
+"detailTextLabelOrderedDays" = "Mon Tue Wed Thu Fri Sat Sun";
+
+"newTrackerEmoji" = "Emoji";
+"newTrackerColor" = "Colour";
+
+"addCategoryButton" = "Add a category";
+
+"trackerViewStubCategory" = "Habits and events can be\ncombined in meaning";
+
+"contextMenuCategoryEdit" = "Edit";
+"contextMenuCategoryDelete" = "Delete";
+
+"addNewCategoryTextField" = "Enter the category name";
+"addNewCategoryDoneButton" = "Done";
+
+"addNewCategoryNew" = "New category";
+"addNewCategoryEditing" = "Editing";
+
+"statisticsErrorLabel" = "There is nothing to analyze yet";
+
+"showAlertTitle" = "Error";
+"showAlertOk" = "Ok";
+
+"Monday" = "Monday";
+"Tuesday" = "Tuesday";
+"Wednesday" = "Wednesday";
+"Thursday" = "Thursday";
+"Friday" = "Friday";
+"Saturday" = "Saturday";
+"Sunday" = "Sunday";
+
+"Sun" = "Sun";
+"Mon" = "Mon";
+"Tue" = "Tue";
+"Wed" = "Wed";
+"Thu" = "Thu";
+"Fri" = "Fri";
+"Sat" = "Sat";
+

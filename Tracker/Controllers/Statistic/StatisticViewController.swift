@@ -17,7 +17,6 @@ final class StatisticViewController: UIViewController {
     
     private let errorLabel: UILabel = {
         let label = UILabel()
-        label.text = "Анализировать пока нечего"
         label.textColor = .ypBlackDay
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.numberOfLines = 1
@@ -32,7 +31,7 @@ final class StatisticViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        navigationItem.title = "Статистика"
+        navigationItem.title = LocalizableKeys.statisticsTabBarItem
         navigationController?.navigationBar.prefersLargeTitles = true
     }
 }
@@ -41,6 +40,7 @@ private extension StatisticViewController {
     func setupViews() {
         view.backgroundColor = .ypWhiteDay
         view.addSubviews(errorImageView, errorLabel)
+        errorLabel.text = LocalizableKeys.statisticsErrorLabel
     }
     
     func setupAllConstraints() {

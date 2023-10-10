@@ -15,7 +15,7 @@ protocol NewTrackerViewControllerProtocol: AnyObject {
 
 final class NewTrackerViewController: UIViewController {
     
-    private let namesButton: [String] = ["Категория", "Расписание"]
+    private lazy var namesButton: [String] = [LocalizableKeys.newTrackerCategory, LocalizableKeys.newTrackerTimetable]
     
     private let emojies = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -40,7 +40,7 @@ final class NewTrackerViewController: UIViewController {
     
     private let limitLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = LocalizableKeys.limitLabel
         label.font = UIFont.systemFont(ofSize: 17)
         label.textColor = .yp_Red
         label.numberOfLines = 1
@@ -54,7 +54,7 @@ final class NewTrackerViewController: UIViewController {
     private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 30))
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = LocalizableKeys.newTrackerTextField
         textField.leftViewMode = .always
         textField.backgroundColor = .ypBackgroundDay
         textField.layer.cornerRadius = 10
@@ -110,7 +110,7 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(LocalizableKeys.newTrackerCancelButton, for: .normal)
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.yp_Red.cgColor
         button.setTitleColor(.yp_Red, for: .normal)
@@ -123,7 +123,7 @@ final class NewTrackerViewController: UIViewController {
     
     private lazy var createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(LocalizableKeys.newTrackerCreateButton, for: .normal)
         button.tintColor = .white
         button.backgroundColor = .yp_Gray
         button.layer.cornerRadius = 16
@@ -261,11 +261,11 @@ extension NewTrackerViewController: UITableViewDataSource {
         case 1:
             if let days = detailTextDays {
                 if days.count == 7 {
-                    detailTextLabel.text = "Каждый день"
+                    detailTextLabel.text = LocalizableKeys.detailTextLabelEveryDay
                     isEnabledDictionary["timetable"] = true
                     createButtonIsEnabled()
                 } else {
-                    let orderedDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+                    let orderedDays = LocalizableKeys.detailTextLabelOrderedDays.components(separatedBy: " ")
                     let sortedDays = days.sorted { first, second in
                         if let firstIndex = orderedDays.firstIndex(of: first), let secondIndex = orderedDays.firstIndex(of: second) {
                             return firstIndex < secondIndex
@@ -298,12 +298,12 @@ extension NewTrackerViewController: UITableViewDelegate {
         dismissKeyboard()
         switch indexPath.row {
         case 0: let viewController = CategoriesViewController()
-            chooseCategoryVC(viewController, "Категория")
+            chooseCategoryVC(viewController, LocalizableKeys.newTrackerCategory)
             let categoryViewModel = CategoriesViewModel()
             viewController.initialize(viewModel: categoryViewModel)
             categoryViewModel.delegate = self
         case 1: let viewController = TimetableViewController()
-            chooseCategoryVC(viewController, "Расписание")
+            chooseCategoryVC(viewController, LocalizableKeys.newTrackerTimetable)
             viewController.delegate = self
         default: break
         }
@@ -424,11 +424,11 @@ extension NewTrackerViewController: UICollectionViewDelegate & UICollectionViewD
         
         if indexPath.section == 0 {
             guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? HeaderViewCell else { return UICollectionReusableView()}
-            view.titleLabel.text = "Emoji"
+            view.titleLabel.text = LocalizableKeys.newTrackerEmoji
             return view
         } else {
             guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? HeaderViewCell else { return UICollectionReusableView()}
-            view.titleLabel.text = "Цвет"
+            view.titleLabel.text = LocalizableKeys.newTrackerColor
             return view
         }
     }

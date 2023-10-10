@@ -47,6 +47,7 @@ final class TrackerViewController: UIViewController {
     private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.preferredDatePickerStyle = .compact
+        picker.locale = .autoupdatingCurrent
         picker.datePickerMode = .date
         picker.tintColor = .systemBlue
         picker.date = Date()
@@ -91,7 +92,7 @@ final class TrackerViewController: UIViewController {
                                                     width: view.bounds.width,
                                                     height: view.bounds.height),
                                       image: forCollection ? errorImage : noFoundImage,
-                                      text: forCollection ? "Что будем отслеживать?" : "Ничего не найдено")
+                                      text: forCollection ? LocalizableKeys.emptyErrorStub : LocalizableKeys.searchErrorStub)
             collectionView.backgroundView = emptyView
             collectionView.isScrollEnabled = false
         } else {
@@ -104,7 +105,7 @@ final class TrackerViewController: UIViewController {
     private func setupNavigationBar() {
         if let navBar = navigationController?.navigationBar {
             navigationController?.navigationBar.prefersLargeTitles = true
-            navigationItem.title = "Трекеры"
+            navigationItem.title = LocalizableKeys.trackersNavigationItem
             
             let leftButton = UIBarButtonItem(image: UIImage(named: "addButton"), style: .plain, target: self, action: #selector(addNewTracker))
             leftButton.tintColor = .ypBlackDay
@@ -125,7 +126,7 @@ final class TrackerViewController: UIViewController {
     @objc
     private func addNewTracker() {
         let trackersTypeViewController = TrackersTypeViewController()
-        trackersTypeViewController.title = "Создание трекера"
+        trackersTypeViewController.title = LocalizableKeys.chooseTypeOfTracker
         trackersTypeViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: trackersTypeViewController)
         navigationController.navigationBar.barTintColor = .white
@@ -149,7 +150,7 @@ final class TrackerViewController: UIViewController {
                     return textCondition
                 }
                 let dateCondition = timetable.contains { weekDay in
-                    weekDay == "".shortStringDayForInt(filterWeekday)
+                    weekDay == WeekDays[filterWeekday]
                 }
                 return textCondition && dateCondition
             }
@@ -169,7 +170,7 @@ extension TrackerViewController: TrackerViewControllerDelegate {
         do {
             try trackerCategoryStore.createTrackerWithCategory(tracker: newTracker, with: newTitleCategory)
         } catch {
-            self.showAlert("Невозможно создать трекер")
+            self.showAlert(LocalizableKeys.createTrackerAlert)
         }
         categories = trackerCategoryStore.categories
         filteredByDate(nil)
@@ -181,7 +182,7 @@ extension TrackerViewController: TrackerCellDelegate {
     func completedTracker(id: UUID, at indexPath: IndexPath) {
         let trackerRecord = TrackerRecord(id: id, date: datePicker.date)
         if datePicker.date > Date() {
-            self.showAlert("Нельзя отмечать трекеры для будущих дат")
+            self.showAlert(LocalizableKeys.completedTrackersAlert)
         } else {
             completedTrackers.append(trackerRecord)
             do {
@@ -293,7 +294,7 @@ extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDele
         let indexPath = indexPaths[0]
         let menu = UIMenu(
             children: [
-                UIAction(title: pinTracker ? "Открепить" : "Закрепить") { [weak self] _ in
+                UIAction(title: pinTracker ? LocalizableKeys.unpinTracker : LocalizableKeys.pinTracker) { [weak self] _ in
                     guard let self else { return }
                     if self.pinTracker {
                         self.makeUnpin(indexPath: indexPath)
@@ -301,11 +302,11 @@ extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDele
                         self.makePin(indexPath: indexPath)
                     }
                 },
-                UIAction(title: "Редактировать") { [weak self] _ in
+                UIAction(title: LocalizableKeys.editTracker) { [weak self] _ in
                     guard let self else { return }
                     self.makeEdit(indexPath: indexPath)
                 },
-                UIAction(title: "Удалить", image: nil, identifier: nil, discoverabilityTitle: nil, attributes: .destructive) {[weak self] _ in
+                UIAction(title: LocalizableKeys.deleteTracker, image: nil, identifier: nil, discoverabilityTitle: nil, attributes: .destructive) {[weak self] _ in
                     guard let self else { return }
                     self.makeDelete(indexPath: indexPath)}
             ])
@@ -328,7 +329,6 @@ extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDele
     }
     private func makeEdit(indexPath: IndexPath) {
         let _ = collectionView.cellForItem(at: indexPath) as? TrackerCell
-        //cell?.backgroundColor = .red
     }
     private func makeDelete(indexPath: IndexPath) {
         let searchTracker = visibleCategories[indexPath.section].trackers[indexPath.row]
@@ -390,7 +390,7 @@ extension TrackerViewController: UISearchBarDelegate {
         searchController = UISearchController(searchResultsController: nil)
         searchController?.searchBar.delegate = self
         searchController?.obscuresBackgroundDuringPresentation = false
-        searchController?.searchBar.placeholder = "Поиск"
+        searchController?.searchBar.placeholder = LocalizableKeys.searchBarPlaceholder
         
         navigationItem.searchController = searchController
         
@@ -398,7 +398,7 @@ extension TrackerViewController: UISearchBarDelegate {
             .foregroundColor: UIColor.ypBlackDay,
         ]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
-        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Отмена"
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = LocalizableKeys.searchBarCancel
         definesPresentationContext = true
     }
 }
@@ -420,7 +420,6 @@ private extension TrackerViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            datePicker.widthAnchor.constraint(equalToConstant: 120)
         ])
     }
 }
