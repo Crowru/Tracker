@@ -9,6 +9,8 @@ import UIKit
 
 final class TrackersTypeViewController: UIViewController {
     
+    private let analyticsService: AnalyticsServiceProtocol = AnalyticsService()
+    
     private lazy var habitButton: UIButton = {
         let button = UIButton()
         button.setTitle(LocalizableKeys.chooseTrackerButton, for: .normal)
@@ -48,12 +50,14 @@ final class TrackersTypeViewController: UIViewController {
     // MARK: Selectors
     @objc
     private func addNewHabit() {
+        analyticsService.clickHabitReport()
         showTrackers(false, LocalizableKeys.showTrackerButton)
         UserDefaultsManager.timetableArray = []
     }
     
     @objc
     private func addIreggularEvent() {
+        analyticsService.clickIreggularEventReport()
         showTrackers(true, LocalizableKeys.showIrregularEventButton)
     }
 }

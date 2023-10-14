@@ -14,6 +14,7 @@ protocol StatisticViewControllerDelegate: AnyObject {
 
 final class StatisticViewController: UIViewController {
     
+    private let analyticsService: AnalyticsServiceProtocol = AnalyticsService()
     private let statisticsKey = "statisticsTrackersCompleted"
     private let completeTrackersKey = "completeTrackers"
     
@@ -71,11 +72,13 @@ final class StatisticViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        analyticsService.openScreenReport(screen: .statistics)
         showBackgroundView()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        analyticsService.closeScreenReport(screen: .statistics)
     }
     
     override func viewDidLayoutSubviews() {

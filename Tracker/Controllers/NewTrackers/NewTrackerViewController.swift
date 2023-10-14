@@ -14,6 +14,8 @@ protocol NewTrackerViewControllerProtocol: AnyObject {
 }
 
 final class NewTrackerViewController: UIViewController {
+    
+    private let analyticsService: AnalyticsServiceProtocol = AnalyticsService()
 
     private let trackerRecordStore = TrackerRecordStore()
     
@@ -182,6 +184,8 @@ final class NewTrackerViewController: UIViewController {
     // MARK: Selectors
     @objc
     private func createNewTracker() {
+        analyticsService.clickCreateTrackerReport()
+        
         guard let text = textField.text, let category = detailTextCategory else { return }
         guard let selectedEmojieIndexPath = isSelectedEmoji, let selectedColorIndexPath = isSelectedColor else { return }
         let emojie = emojies[selectedEmojieIndexPath.row]
@@ -200,6 +204,7 @@ final class NewTrackerViewController: UIViewController {
     
     @objc
     private func exitView() {
+        analyticsService.clickExitViewNewTracker()
         dismiss(animated: true)
     }
 }

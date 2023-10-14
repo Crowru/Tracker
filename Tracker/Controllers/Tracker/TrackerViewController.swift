@@ -27,6 +27,8 @@ final class TrackerViewController: UIViewController {
     
     private let refreshControl = UIRefreshControl()
     
+    private let analyticsService: AnalyticsServiceProtocol = AnalyticsService()
+    
     private var currentDate: Date { return datePicker.date }
     
     weak var delegate: StatisticViewControllerDelegate?
@@ -81,6 +83,16 @@ final class TrackerViewController: UIViewController {
         filteredByDate(nil)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        analyticsService.openScreenReport(screen: .main)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.closeScreenReport(screen: .main)
+    }
+    
     private func refreshControlSetup() {
         refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         collectionView.refreshControl = refreshControl
@@ -127,6 +139,8 @@ final class TrackerViewController: UIViewController {
     
     @objc
     private func addNewTracker() {
+        analyticsService.addTrackReport()
+        
         let trackersTypeViewController = TrackersTypeViewController()
         trackersTypeViewController.title = LocalizableKeys.chooseTypeOfTracker
         trackersTypeViewController.delegate = self
@@ -140,6 +154,12 @@ final class TrackerViewController: UIViewController {
     private func datePickerValueChanges(_ sender: UIDatePicker) {
         filteredByDate(nil)
         dismiss(animated: true)
+    }
+    
+    // TODO: - need to finish
+    @objc
+    private func addFilter() {
+        analyticsService.addFilterReport()
     }
     
     private func filteredByDate(_ text: String?) {
@@ -305,11 +325,14 @@ extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDele
                 },
                 UIAction(title: LocalizableKeys.editTracker) { [weak self] _ in
                     guard let self else { return }
+                    self.analyticsService.editTrackReport()
                     self.makeEdit(indexPath: indexPath)
+                    // TODO: - need finish
                     //self.delegate?.updateCompletedTrackersCount(self.completedTrackers.count)
                 },
                 UIAction(title: LocalizableKeys.deleteTracker, image: nil, identifier: nil, discoverabilityTitle: nil, attributes: .destructive) {[weak self] _ in
                     guard let self else { return }
+                    self.analyticsService.deleteTrackReport()
                     self.makeDelete(indexPath: indexPath)}
             ])
         
@@ -320,11 +343,13 @@ extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDele
         return configuration
     }
     private func makePin(indexPath: IndexPath) {
+        analyticsService.clickRecordTrackReport()
         pinTracker = true
         let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell
         cell?.pinnedImageEnabled(yes: pinTracker)
     }
     private func makeUnpin(indexPath: IndexPath) {
+        analyticsService.clickRecordTrackReport()
         pinTracker = false
         let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell
         cell?.pinnedImageEnabled(yes: pinTracker)
