@@ -27,14 +27,14 @@ final class NewTrackerViewController: UIViewController {
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = .white
+        scrollView.backgroundColor = ColoursTheme.blackDayWhiteDay
         scrollView.isScrollEnabled = true
         return scrollView
     }()
     
     private let contentView: UIView = {
         let contentView = UIView()
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = ColoursTheme.blackDayWhiteDay
         return contentView
     }()
     
@@ -58,7 +58,7 @@ final class NewTrackerViewController: UIViewController {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 30))
         textField.placeholder = LocalizableKeys.newTrackerTextField
         textField.leftViewMode = .always
-        textField.backgroundColor = .ypBackgroundDay
+        textField.backgroundColor = ColoursTheme.backgroundNightDay
         textField.layer.cornerRadius = 10
         textField.clearButtonMode = .whileEditing
         textField.clipsToBounds = true
@@ -72,7 +72,7 @@ final class NewTrackerViewController: UIViewController {
                                     style: .insetGrouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: SubtitledTableViewCell.identifier)
         tableView.register(SubtitledTableViewCell.self, forCellReuseIdentifier: SubtitledTableViewCell.identifier)
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = ColoursTheme.blackDayWhiteDay
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 75
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -92,7 +92,7 @@ final class NewTrackerViewController: UIViewController {
         collectionView.register(HeaderViewCell.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: "header")
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = ColoursTheme.blackDayWhiteDay
         collectionView.allowsMultipleSelection = true
         collectionView.isScrollEnabled = false
         collectionView.dataSource = self
@@ -116,7 +116,7 @@ final class NewTrackerViewController: UIViewController {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.yp_Red.cgColor
         button.setTitleColor(.yp_Red, for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = ColoursTheme.blackDayWhiteDay
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(exitView), for: .touchUpInside)
@@ -126,7 +126,7 @@ final class NewTrackerViewController: UIViewController {
     private lazy var createButton: UIButton = {
         let button = UIButton()
         button.setTitle(LocalizableKeys.newTrackerCreateButton, for: .normal)
-        button.tintColor = .white
+        //button.tintColor = .white
         button.backgroundColor = .yp_Gray
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -171,7 +171,8 @@ final class NewTrackerViewController: UIViewController {
             createButton.backgroundColor = .yp_Gray
             return }
         createButton.isEnabled = true
-        createButton.backgroundColor = .ypBlackDay
+        createButton.backgroundColor = ColoursTheme.whiteDayBlackDay
+        createButton.setTitleColor(ColoursTheme.blackDayWhiteDay, for: .normal)
     }
     
     private func dismissKeyboard() {
@@ -247,7 +248,7 @@ extension NewTrackerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SubtitledTableViewCell.identifier, for: indexPath)
         cell.textLabel?.text = namesButton[indexPath.row]
-        cell.backgroundColor = .ypBackgroundDay
+        cell.backgroundColor = ColoursTheme.backgroundNightDay
         cell.accessoryType = .disclosureIndicator
         
         guard let detailTextLabel = cell.detailTextLabel else { return cell }
@@ -315,7 +316,7 @@ extension NewTrackerViewController: UITableViewDelegate {
         let viewController = viewController
         viewController.title = title
         let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.navigationBar.barTintColor = .ypWhiteDay
+        navigationController.navigationBar.barTintColor = ColoursTheme.blackDayWhiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }
@@ -427,10 +428,12 @@ extension NewTrackerViewController: UICollectionViewDelegate & UICollectionViewD
         if indexPath.section == 0 {
             guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? HeaderViewCell else { return UICollectionReusableView()}
             view.titleLabel.text = LocalizableKeys.newTrackerEmoji
+            view.titleLabel.textColor = ColoursTheme.whiteDayBlackDay
             return view
         } else {
             guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? HeaderViewCell else { return UICollectionReusableView()}
             view.titleLabel.text = LocalizableKeys.newTrackerColor
+            view.titleLabel.textColor = ColoursTheme.whiteDayBlackDay
             return view
         }
     }
@@ -476,7 +479,7 @@ extension NewTrackerViewController: UIScrollViewDelegate {
 private extension NewTrackerViewController {
     func setupView() {
         _ = self.hideKeyboardWhenClicked
-        view.backgroundColor = .white
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.addSubviews(scrollView)
         scrollView.addSubviews(contentView)
         scrollView.delegate = self

@@ -37,7 +37,7 @@ final class EmptyView: UIView {
 // MARK: - Layouts
 private extension EmptyView {
     func setupViews() {
-        self.backgroundColor = .white
+        self.backgroundColor = ColoursTheme.blackDayWhiteDay
         
         addSubviews(placeholderImage, textLabel)
         

@@ -40,7 +40,7 @@ final class TrackersTypeViewController: UIViewController {
             self.delegate?.createTracker(tracker, titleCategory: titleCotegory)
         }
         let navigationController = UINavigationController(rootViewController: newTrackerVC)
-        navigationController.navigationBar.barTintColor = .ypWhiteDay
+        navigationController.navigationBar.barTintColor = ColoursTheme.blackDayWhiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }
@@ -61,12 +61,12 @@ final class TrackersTypeViewController: UIViewController {
 // MARK: - SetupViews
 private extension TrackersTypeViewController {
     func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.addSubviews(habitButton, irregularEventButton)
         [habitButton, irregularEventButton].forEach {
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            $0.backgroundColor = .ypBlackDay
-            $0.tintColor = .white
+            $0.backgroundColor = ColoursTheme.whiteDayBlackDay
+            $0.setTitleColor(ColoursTheme.blackDayWhiteDay, for: .normal)
             $0.layer.cornerRadius = 16
             $0.layer.masksToBounds = true
         }

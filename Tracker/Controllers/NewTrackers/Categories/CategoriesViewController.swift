@@ -16,7 +16,7 @@ final class CategoriesViewController: UIViewController {
                                     style: .insetGrouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "categoryCell")
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = ColoursTheme.blackDayWhiteDay
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
@@ -26,7 +26,8 @@ final class CategoriesViewController: UIViewController {
         let button = UIButton()
         button.setTitle(LocalizableKeys.addCategoryButton, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .ypBlackDay
+        button.backgroundColor = ColoursTheme.whiteDayBlackDay
+        button.setTitleColor(ColoursTheme.blackDayWhiteDay, for: .normal)
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(addNewCategory), for: .touchUpInside)
         return button
@@ -58,7 +59,7 @@ final class CategoriesViewController: UIViewController {
     private func goToAddNewCategory(isEdit: Bool = false, text: String? = nil) {
         guard let addNewCategoryViewController = viewModel?.addNewCategory(isEdit: isEdit, text: text) else { return }
         let navigationController = UINavigationController(rootViewController: addNewCategoryViewController)
-        navigationController.navigationBar.barTintColor = .ypWhiteDay
+        navigationController.navigationBar.barTintColor = ColoursTheme.blackDayWhiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }
@@ -100,7 +101,6 @@ extension CategoriesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath)
         cell.textLabel?.text = viewModel?.categories[indexPath.row].title
-        cell.backgroundColor = .ypBackgroundDay
         cell.accessoryType = indexPath == viewModel?.editingIndexPath ? .checkmark : .none
         return cell
     }
@@ -153,7 +153,7 @@ extension CategoriesViewController: UITableViewDelegate {
 // MARK: - SetupViews
 private extension CategoriesViewController {
     func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.addSubviews(tableView, addCategoryButton)
         
         NSLayoutConstraint.activate([

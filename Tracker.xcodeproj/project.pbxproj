@@ -19,6 +19,7 @@
 		2A5383CE2ADACA310012598F /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5383CD2ADACA310012598F /* TrackerTests.swift */; };
 		2A5383D62ADACADC0012598F /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 2A5383D52ADACADC0012598F /* InlineSnapshotTesting */; };
 		2A5383D82ADACADC0012598F /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 2A5383D72ADACADC0012598F /* SnapshotTesting */; };
+		2A5383DC2ADAD8020012598F /* ColoursTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5383DB2ADAD8020012598F /* ColoursTheme.swift */; };
 		2A68040B2AB358B60067DB79 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68040A2AB358B60067DB79 /* TrackerStore.swift */; };
 		2A68040D2AB358CD0067DB79 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68040C2AB358CD0067DB79 /* TrackerCategoryStore.swift */; };
 		2A68040F2AB358DB0067DB79 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A68040E2AB358DB0067DB79 /* TrackerRecordStore.swift */; };
@@ -84,6 +85,7 @@
 		2A4F9BA22AC0AB8200C46DA4 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		2A5383CB2ADACA310012598F /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A5383CD2ADACA310012598F /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
+		2A5383DB2ADAD8020012598F /* ColoursTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoursTheme.swift; sourceTree = "<group>"; };
 		2A68040A2AB358B60067DB79 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		2A68040C2AB358CD0067DB79 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		2A68040E2AB358DB0067DB79 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				2A0B39AD2AB63F7C00276B79 /* WeekdaysMarshalling.swift */,
 				2ACDCA4B2AC48DDA008827A0 /* UserDefaultsManager.swift */,
 				2A162FFA2AC8A8DE00BDBF79 /* Observable.swift */,
+				2A5383DB2ADAD8020012598F /* ColoursTheme.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				2AED5D372AA10E640049ACD4 /* Cell + Extension.swift in Sources */,
 				2A7FD8662A97F104003ED0DD /* AppDelegate.swift in Sources */,
 				2AED5D4E2AA615990049ACD4 /* UIColor + Extension.swift in Sources */,
+				2A5383DC2ADAD8020012598F /* ColoursTheme.swift in Sources */,
 				2A6804132AB38A7F0067DB79 /* UIColorMarshalling.swift in Sources */,
 				2A68040F2AB358DB0067DB79 /* TrackerRecordStore.swift in Sources */,
 				2AED5D552AA6564E0049ACD4 /* AddNewCategoryViewController.swift in Sources */,

@@ -35,7 +35,7 @@ final class TrackerViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: TrackerCell.identifier)
         collectionView.register(HeaderViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = ColoursTheme.blackDayWhiteDay
         collectionView.allowsMultipleSelection = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -48,8 +48,11 @@ final class TrackerViewController: UIViewController {
         picker.preferredDatePickerStyle = .compact
         picker.locale = .autoupdatingCurrent
         picker.datePickerMode = .date
-        picker.tintColor = .systemBlue
+        picker.tintColor = .yp_Blue
         picker.date = Date()
+        picker.subviews[0].backgroundColor = ColoursTheme.whiteLightGray
+        picker.subviews[0].layer.cornerRadius = 8
+        picker.overrideUserInterfaceStyle = .light
         picker.addTarget(self, action: #selector(datePickerValueChanges), for: .valueChanged)
         return picker
     }()
@@ -107,7 +110,7 @@ final class TrackerViewController: UIViewController {
             navigationItem.title = LocalizableKeys.trackersNavigationItem
             
             let leftButton = UIBarButtonItem(image: ImageAssets.trackerAddButton, style: .plain, target: self, action: #selector(addNewTracker))
-            leftButton.tintColor = .ypBlackDay
+            leftButton.tintColor = ColoursTheme.whiteDayBlackDay
             navBar.topItem?.setLeftBarButton(leftButton, animated: false)
             
             let dateButton = UIBarButtonItem(customView: datePicker)
@@ -128,7 +131,7 @@ final class TrackerViewController: UIViewController {
         trackersTypeViewController.title = LocalizableKeys.chooseTypeOfTracker
         trackersTypeViewController.delegate = self
         let navigationController = UINavigationController(rootViewController: trackersTypeViewController)
-        navigationController.navigationBar.barTintColor = .white
+        navigationController.navigationBar.barTintColor = ColoursTheme.whiteDayBlackDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }
@@ -394,7 +397,7 @@ extension TrackerViewController: UISearchBarDelegate {
         navigationItem.searchController = searchController
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.ypBlackDay,
+            .foregroundColor: ColoursTheme.whiteDayBlackDay,
         ]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = LocalizableKeys.searchBarCancel
@@ -405,6 +408,7 @@ extension TrackerViewController: UISearchBarDelegate {
 //MARK: - SetupViews
 private extension TrackerViewController {
     func setupViews() {
+        view.backgroundColor = ColoursTheme.whiteDayBlackDay
         categories = trackerCategoryStore.categories
         visibleCategories = categories
         filteredCategoriesByDate = categories

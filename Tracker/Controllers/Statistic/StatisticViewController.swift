@@ -28,7 +28,7 @@ final class StatisticViewController: UIViewController {
     
     private lazy var statisticView: UIView = {
         let view = UIView()
-        view.backgroundColor = .ypBackgroundDay
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.layer.cornerRadius = 16
         view.addSubview(countTrackersLabel)
         view.addSubview(trackersCompletedLabel)
@@ -39,14 +39,14 @@ final class StatisticViewController: UIViewController {
         let label = UILabel()
         label.text = completeTrackers.description
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        label.textColor = .ypBlackDay
+        label.textColor = ColoursTheme.whiteDayBlackDay
         return label
     }()
     
     private lazy var trackersCompletedLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlackDay
+        label.textColor = ColoursTheme.whiteDayBlackDay
         return label
     }()
     
@@ -145,7 +145,7 @@ private extension StatisticViewController {
     }
     
     func setupViews() {
-        view.backgroundColor = .ypWhiteDay
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.addSubviews(statisticView)
         statisticView.addSubviews(countTrackersLabel, trackersCompletedLabel)
     }

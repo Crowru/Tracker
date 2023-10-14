@@ -57,7 +57,7 @@ final class TrackerCell: UICollectionViewCell {
     private lazy var counterLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlackDay
+        label.textColor = ColoursTheme.whiteDayBlackDay
         return label
     }()
     

@@ -18,7 +18,7 @@ final class AddNewCategoryViewController: UIViewController {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 30))
         textField.leftViewMode = .always
         textField.placeholder = LocalizableKeys.addNewCategoryTextField
-        textField.backgroundColor = .ypBackgroundDay
+        textField.backgroundColor = ColoursTheme.backgroundNightDay
         textField.layer.cornerRadius = 16
         textField.clearButtonMode = .whileEditing
         textField.clipsToBounds = true
@@ -75,8 +75,8 @@ final class AddNewCategoryViewController: UIViewController {
     private func editCategory() {
         if isEdit {
             textField.text = editText
-            doneButton.backgroundColor = .ypBlackDay
-            doneButton.setTitleColor(.white, for: .normal)
+            doneButton.backgroundColor = ColoursTheme.whiteDayBlackDay
+            doneButton.setTitleColor(ColoursTheme.blackDayWhiteDay, for: .normal)
             doneButton.isEnabled = true
         }
     }
@@ -106,8 +106,8 @@ extension AddNewCategoryViewController: UITextFieldDelegate {
             doneButton.isEnabled = false
             return newText != " "
         } else {
-            doneButton.backgroundColor = .ypBlackDay
-            doneButton.setTitleColor(.white, for: .normal)
+            doneButton.backgroundColor = ColoursTheme.whiteDayBlackDay
+            doneButton.setTitleColor(ColoursTheme.blackDayWhiteDay, for: .normal)
             doneButton.isEnabled = true
         }
         return true
@@ -124,7 +124,7 @@ extension AddNewCategoryViewController: UITextFieldDelegate {
 // MARK: - SetupViews
 extension AddNewCategoryViewController {
     private func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.addSubviews(textField, doneButton)
         
         NSLayoutConstraint.activate([
