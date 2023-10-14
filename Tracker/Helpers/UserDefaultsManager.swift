@@ -27,4 +27,5 @@ final class UserDefaultsManager {
     @Defaults<[String]>(key: "categoriesArray") static var categoriesArray
     @Defaults<[String]>(key: "timetableArray") static var timetableArray
     @Defaults<Int>(key: "editingIndexPath") static var editingIndexPath
+    @Defaults<Int>(key: "completedTrackers") static var completedTrackers
 }

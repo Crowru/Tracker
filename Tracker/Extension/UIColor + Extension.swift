@@ -18,6 +18,9 @@ extension UIColor {
     static var yp_Red: UIColor { UIColor(named: "ypRed") ?? #colorLiteral(red: 0.9607843137, green: 0.4196078431, blue: 0.4235294118, alpha: 1) }
     static var ypWhiteDay: UIColor { UIColor(named: "White [day]") ?? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) }
     static var ypWhiteNight: UIColor { UIColor(named: "White [night]") ?? #colorLiteral(red: 0.1019607843, green: 0.1058823529, blue: 0.1333333333, alpha: 1) }
+    static var ypGradientRed: UIColor { UIColor(named: "gradientRed") ?? UIColor.systemRed}
+    static var ypGradientGreen: UIColor { UIColor(named: "gradientGreen") ?? UIColor.systemGreen}
+    static var ypGradientBlue: UIColor { UIColor(named: "gradientBlue") ?? UIColor.systemBlue}
     static let colorSelection: [UIColor] = [
         UIColor(named: "Color selection 1") ?? #colorLiteral(red: 1, green: 0.3956416845, blue: 0.3553284407, alpha: 1),
         UIColor(named: "Color selection 2") ?? #colorLiteral(red: 1, green: 0.606235683, blue: 0.1476774216, alpha: 1),

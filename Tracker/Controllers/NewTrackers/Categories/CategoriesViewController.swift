@@ -66,12 +66,11 @@ final class CategoriesViewController: UIViewController {
     private func updateTableView() {
         guard let categories = viewModel?.categories.isEmpty else { return }
         if categories {
-            guard let image = UIImage(named: "errorImage") else { return }
             let emptyView = EmptyView(frame: CGRect(
                 x: 0,
                 y: 0,
                 width: view.bounds.width,
-                height: view.bounds.height), image: image,
+                height: view.bounds.height), image: ImageAssets.trackerErrorImage,
                                       text: LocalizableKeys.trackerViewStubCategory)
             tableView.backgroundView = emptyView
         } else {

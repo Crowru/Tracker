@@ -21,9 +21,6 @@ final class TrackerViewController: UIViewController {
     // MARK: Geometric parameters collectionView
     private let params = GeometryParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpacing: 9)
     
-    private let noFoundImage = UIImage(named: "noFound")
-    private let errorImage = UIImage(named: "errorImage")
-    
     private let trackerStore = TrackerStore()
     private let trackerCategoryStore = TrackerCategoryStore()
     private let trackerRecordStore = TrackerRecordStore()
@@ -31,6 +28,8 @@ final class TrackerViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     
     private var currentDate: Date { return datePicker.date }
+    
+    weak var delegate: StatisticViewControllerDelegate?
         
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -91,7 +90,7 @@ final class TrackerViewController: UIViewController {
                                                     y: 0,
                                                     width: view.bounds.width,
                                                     height: view.bounds.height),
-                                      image: forCollection ? errorImage : noFoundImage,
+                                      image: forCollection ? ImageAssets.trackerErrorImage : ImageAssets.trackerNoFoundImage,
                                       text: forCollection ? LocalizableKeys.emptyErrorStub : LocalizableKeys.searchErrorStub)
             collectionView.backgroundView = emptyView
             collectionView.isScrollEnabled = false
@@ -107,7 +106,7 @@ final class TrackerViewController: UIViewController {
             navigationController?.navigationBar.prefersLargeTitles = true
             navigationItem.title = LocalizableKeys.trackersNavigationItem
             
-            let leftButton = UIBarButtonItem(image: UIImage(named: "addButton"), style: .plain, target: self, action: #selector(addNewTracker))
+            let leftButton = UIBarButtonItem(image: ImageAssets.trackerAddButton, style: .plain, target: self, action: #selector(addNewTracker))
             leftButton.tintColor = .ypBlackDay
             navBar.topItem?.setLeftBarButton(leftButton, animated: false)
             
@@ -191,17 +190,16 @@ extension TrackerViewController: TrackerCellDelegate {
                 assertionFailure("Enabled to add \(trackerRecord)")
             }
         }
+        self.delegate?.showCompletedTrackers(self.completedTrackers.count)
         collectionView.reloadItems(at: [indexPath])
     }
     func uncompletedTracker(id: UUID, at indexPath: IndexPath) {
         let filteredTrackerRecord = completedTrackers.filter { trackerRecord in
             isSameTrackerRecord(trackerRecord, id: id)
         }
-        print(filteredTrackerRecord)
         completedTrackers.removeAll { trackerRecord in
             isSameTrackerRecord(trackerRecord, id: id)
         }
-        print(completedTrackers)
         filteredTrackerRecord.forEach { trackerRecord in
             do {
                 try trackerRecordStore.deleteTrackerRecord(trackerRecord: trackerRecord)
@@ -209,7 +207,7 @@ extension TrackerViewController: TrackerCellDelegate {
                 assertionFailure("Enabled to delete \(trackerRecord)")
             }
         }
-        print(trackerRecordStore.trackerRecords)
+        self.delegate?.showCompletedTrackers(self.completedTrackers.count)
         collectionView.reloadItems(at: [indexPath])
     }
 }
@@ -305,6 +303,7 @@ extension TrackerViewController: UICollectionViewDelegate & UICollectionViewDele
                 UIAction(title: LocalizableKeys.editTracker) { [weak self] _ in
                     guard let self else { return }
                     self.makeEdit(indexPath: indexPath)
+                    //self.delegate?.updateCompletedTrackersCount(self.completedTrackers.count)
                 },
                 UIAction(title: LocalizableKeys.deleteTracker, image: nil, identifier: nil, discoverabilityTitle: nil, attributes: .destructive) {[weak self] _ in
                     guard let self else { return }

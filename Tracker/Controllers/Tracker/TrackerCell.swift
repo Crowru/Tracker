@@ -73,7 +73,7 @@ final class TrackerCell: UICollectionViewCell {
     
     private let pinnedImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Pinned")
+        imageView.image = ImageAssets.pinned
         imageView.isHidden = true
         return imageView
     }()
@@ -140,7 +140,7 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     private func updatePlusButton(trackerCompleted: Bool) {
-        let image: UIImage = (trackerCompleted ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus"))!
+        let image: UIImage = (trackerCompleted ? ImageAssets.systemCheckmark : ImageAssets.systemPlus)!
         plusButton.setImage(image, for: .normal)
         let buttonOpacity: Float = trackerCompleted ? 0.3 : 1
         plusButton.layer.opacity = buttonOpacity

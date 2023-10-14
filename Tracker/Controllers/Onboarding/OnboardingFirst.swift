@@ -10,7 +10,7 @@ import UIKit
 final class OnboardingFirst: UIViewController {
     private let backgroundImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "firstBackground")
+        imageView.image = ImageAssets.onboardingFirstBackground
         return imageView
     }()
     private let labelOnboarding: UILabel = {

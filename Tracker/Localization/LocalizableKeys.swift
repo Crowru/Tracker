@@ -71,4 +71,6 @@ enum LocalizableKeys {
     
     static let showAlertTitle = "showAlertTitle".localised()
     static let showAlertOk = "showAlertOk".localised()
+    
+    static let statisticsTrackersCompleted = "statisticsTrackersCompleted".localised()
 }

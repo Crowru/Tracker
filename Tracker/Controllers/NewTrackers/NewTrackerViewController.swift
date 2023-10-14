@@ -14,8 +14,8 @@ protocol NewTrackerViewControllerProtocol: AnyObject {
 }
 
 final class NewTrackerViewController: UIViewController {
-    
-    private lazy var namesButton: [String] = [LocalizableKeys.newTrackerCategory, LocalizableKeys.newTrackerTimetable]
+
+    private let trackerRecordStore = TrackerRecordStore()
     
     private let emojies = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -48,6 +48,8 @@ final class NewTrackerViewController: UIViewController {
         label.isHidden = true
         return label
     }()
+    
+    private lazy var namesButton: [String] = [LocalizableKeys.newTrackerCategory, LocalizableKeys.newTrackerTimetable]
         
     var onTrackerCreated: ((_ tracker: Tracker, _ titleCategory: String?) -> Void)?
     
