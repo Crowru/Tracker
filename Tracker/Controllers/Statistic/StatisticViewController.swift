@@ -7,43 +7,23 @@
 
 import UIKit
 
-// MARK: - StatisticViewControllerDelegate
-protocol StatisticViewControllerDelegate: AnyObject {
-    func showCompletedTrackers(_ completeTrackers: Int)
-}
-
-final class StatisticViewController: UIViewController {
+final class StatisticsViewController: UIViewController {
     
-    private let analyticsService: AnalyticsServiceProtocol = AnalyticsService()
-    private let statisticsKey = "statisticsTrackersCompleted"
-    private let completeTrackersKey = "completeTrackers"
-    
-    private var completeTrackers: Int {
-        get {
-            UserDefaults.standard.integer(forKey: completeTrackersKey)
-        } set {
-            UserDefaults.standard.set(newValue, forKey: completeTrackersKey)
-            updateCompleteTrackers()
-        }
-    }
-    
-    private lazy var statisticView: UIView = {
+    private lazy var trackersCompletedView: UIView = {
         let view = UIView()
         view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.layer.cornerRadius = 16
-        view.addSubview(countTrackersLabel)
-        view.addSubview(trackersCompletedLabel)
+        countTrackersLabel.text = viewModel?.completedTrackers.count.description
+        trackersCompletedLabel.text = viewModel?.trackersCompletedText()
+        view.addSubviews(countTrackersLabel, trackersCompletedLabel)
         return view
     }()
-    
     private lazy var countTrackersLabel: UILabel = {
         let label = UILabel()
-        label.text = completeTrackers.description
         label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         label.textColor = ColoursTheme.whiteDayBlackDay
         return label
     }()
-    
     private lazy var trackersCompletedLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
@@ -54,117 +34,97 @@ final class StatisticViewController: UIViewController {
     private lazy var gradientLayer: CAGradientLayer = {
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [
-            UIColor.ypGradientRed.cgColor,
-            UIColor.ypGradientGreen.cgColor,
-            UIColor.ypGradientBlue.cgColor
+            UIColor.gradientRed.cgColor,
+            UIColor.gradientGreen.cgColor,
+            UIColor.gradientBlue.cgColor
         ]
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         return gradientLayer
     }()
     
-    // MARK: - LyfeCycle
+    // MARK: ViewModel
+    var viewModel: StatisticsViewModel?
+    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        setupUI()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        analyticsService.openScreenReport(screen: .statistics)
         showBackgroundView()
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        analyticsService.closeScreenReport(screen: .statistics)
+    func initialize(viewModel: StatisticsViewModel) {
+        self.viewModel = viewModel
+        bind()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
-        setupGradientBorder(to: statisticView)
-    }
-}
-
-// MARK: - Private Func
-private extension StatisticViewController {
-    func updateCompleteTrackers() {
-        countTrackersLabel.text = completeTrackers.description
-        trackersCompletedLabel.text = String.localizedStringWithFormat(
-            NSLocalizedString(statisticsKey, comment: ""), completeTrackers)
+    // MARK: Binding
+    private func bind() {
+        viewModel?.$completedTrackers.bind(action: { [weak self] _ in
+            self?.showBackgroundView()
+        })
     }
     
-    func showBackgroundView() {
-        if completeTrackers == 0 {
-            let emptyView = EmptyView(
-                frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height),
-                image: ImageAssets.statisticErrorImage,
-                text: LocalizableKeys.statisticsErrorLabel
-            )
-            self.view = emptyView
+    // MARK: Update completed trackers
+    private func updateCompletedTrackers() {
+        countTrackersLabel.text = viewModel?.completedTrackers.count.description
+        trackersCompletedLabel.text = viewModel?.trackersCompletedText()
+    }
+    
+    private func showBackgroundView() {
+        guard let completedTrackers = viewModel?.completedTrackers else { return }
+        if completedTrackers.isEmpty {
+            emptyView(ImageAssets.statisticErrorImage, LocalizableKeys.statisticsErrorLabel)
         } else {
-            view = UIView()
-            setupUI()
-            updateCompleteTrackers()
+            emptyView(nil, "")
+            setupViewsConstraints()
+            updateCompletedTrackers()
         }
     }
+    private func emptyView(_ image: UIImage?, _ text: String) {
+        let emptyViewStub = EmptyView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height), image: image, text: text)
+        view = emptyViewStub
+    }
     
-    // MARK: Setup Gradient
-    func setupGradientBorder(to view: UIView, cornerRadius: CGFloat = 16, borderWidth: CGFloat = 1.0) {
+    // MARK: GradientLayer methods
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupGradientBorder(to: trackersCompletedView, gradientLayer: gradientLayer)
+    }
+    private func setupGradientBorder(to view: UIView, cornerRadius: CGFloat = 16, borderWidth: CGFloat = 2.0, gradientLayer: CAGradientLayer) {
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
         let shapeLayer = CAShapeLayer()
         let path = UIBezierPath(roundedRect: view.bounds, cornerRadius: cornerRadius)
         shapeLayer.path = path.cgPath
         shapeLayer.lineWidth = borderWidth
         shapeLayer.strokeColor = UIColor.black.cgColor
         shapeLayer.fillColor = UIColor.clear.cgColor
-        
         gradientLayer.mask = shapeLayer
         view.layer.addSublayer(gradientLayer)
     }
 }
 
-// MARK: - StatisticViewControllerDelegate
-extension StatisticViewController: StatisticViewControllerDelegate {
-    func showCompletedTrackers(_ completedTrackers: Int) {
-        self.completeTrackers = completedTrackers
-    }
-}
-
-// MARK: - Setup Navigation Bar
-private extension StatisticViewController {
+// MARK: - Setup views and constraints
+private extension StatisticsViewController {
     func setupNavigationBar() {
         navigationItem.title = LocalizableKeys.statisticsTabBarItem
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-}
-
-// MARK: - SetupUI
-private extension StatisticViewController {
-    func setupUI() {
-        setupViews()
-        setupConstraints()
-    }
-    
-    func setupViews() {
+    func setupViewsConstraints() {
         view.backgroundColor = ColoursTheme.blackDayWhiteDay
-        view.addSubviews(statisticView)
-        statisticView.addSubviews(countTrackersLabel, trackersCompletedLabel)
-    }
-    
-    func setupConstraints() {
+        view.addSubviews(trackersCompletedView)
+        trackersCompletedView.addSubviews(countTrackersLabel, trackersCompletedLabel)
+        
         NSLayoutConstraint.activate([
-            statisticView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
-            statisticView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            statisticView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            statisticView.heightAnchor.constraint(equalToConstant: view.bounds.width * 90/343),
+            trackersCompletedView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
+            trackersCompletedView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            trackersCompletedView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            trackersCompletedView.heightAnchor.constraint(equalToConstant: view.bounds.width * 90/343),
             
-            countTrackersLabel.topAnchor.constraint(equalTo: statisticView.topAnchor, constant: 15),
-            countTrackersLabel.leadingAnchor.constraint(equalTo: statisticView.leadingAnchor, constant: 12),
+            countTrackersLabel.topAnchor.constraint(equalTo: trackersCompletedView.topAnchor, constant: 15),
+            countTrackersLabel.leadingAnchor.constraint(equalTo: trackersCompletedView.leadingAnchor, constant: 12),
             
             trackersCompletedLabel.topAnchor.constraint(equalTo: countTrackersLabel.bottomAnchor, constant: 15),
-            trackersCompletedLabel.leadingAnchor.constraint(equalTo: statisticView.leadingAnchor, constant: 12),
+            trackersCompletedLabel.leadingAnchor.constraint(equalTo: trackersCompletedView.leadingAnchor, constant: 12)
         ])
     }
 }

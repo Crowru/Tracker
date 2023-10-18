@@ -34,6 +34,8 @@
 
 "chooseTrackerButton" = "Привычка";
 "chooseIrregularEventButton" = "Нерегулярное событие";
+"editingHabits" = "Редактирование привычки";
+"editingIrregularEvent" = "Редактирование нерегулярного события";
 
 "showTrackerButton" = "Новая привычка";
 "showIrregularEventButton" = "Новое нерегулярное событие";

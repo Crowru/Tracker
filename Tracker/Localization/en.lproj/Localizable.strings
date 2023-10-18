@@ -34,6 +34,8 @@
 
 "chooseTrackerButton" = "Tracker";
 "chooseIrregularEventButton" = "Irregular event";
+"editingHabits" = "Editing habits";
+"editingIrregularEvent" = "Editing Irregular Event";
 
 "showTrackerButton" = "A new tracker";
 "showIrregularEventButton" = "New irregular event";

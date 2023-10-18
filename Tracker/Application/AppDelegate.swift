@@ -11,8 +11,6 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    private let analyticsService = AnalyticsService()
-
     lazy var persistantContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TrackerModel")
         container.loadPersistentStores { storeDescription, error in
@@ -24,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        analyticsService.activateAnalytics()
+        AnalyticsService.activateAnalytics()
         return true
     }
 

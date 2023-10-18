@@ -18,6 +18,7 @@
 		2A28C1812ABE11AD0083CAA4 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A28C1802ABE11AD0083CAA4 /* UIViewController.swift */; };
 		2A2AA81E2AD4909000B39896 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 2A2AA8202AD4909000B39896 /* Localizable.stringsdict */; };
 		2A4229142AD9AC4500ABDDA3 /* ImageAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4229132AD9AC4500ABDDA3 /* ImageAssets.swift */; };
+		2A4542F42AE008B80020A0D7 /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4542F32AE008B80020A0D7 /* StatisticsViewModel.swift */; };
 		2A4F9BA32AC0AB8200C46DA4 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A4F9BA22AC0AB8200C46DA4 /* OnboardingViewController.swift */; };
 		2A5383CE2ADACA310012598F /* TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5383CD2ADACA310012598F /* TrackerTests.swift */; };
 		2A5383D62ADACADC0012598F /* InlineSnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 2A5383D52ADACADC0012598F /* InlineSnapshotTesting */; };
@@ -91,6 +92,7 @@
 		2A3B6B0D2AA8EC5E000E3B78 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		2A3B6B0E2AA8EC87000E3B78 /* ru */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = ru; path = ru.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A4229132AD9AC4500ABDDA3 /* ImageAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAssets.swift; sourceTree = "<group>"; };
+		2A4542F32AE008B80020A0D7 /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		2A4F9BA22AC0AB8200C46DA4 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		2A5383CB2ADACA310012598F /* TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A5383CD2ADACA310012598F /* TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTests.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				2A12A2BB2A9A74200024B3E4 /* StatisticViewController.swift */,
+				2A4542F32AE008B80020A0D7 /* StatisticsViewModel.swift */,
 			);
 			path = Statistic;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				2A28C1812ABE11AD0083CAA4 /* UIViewController.swift in Sources */,
 				2AED5D372AA10E640049ACD4 /* Cell + Extension.swift in Sources */,
 				2A7FD8662A97F104003ED0DD /* AppDelegate.swift in Sources */,
+				2A4542F42AE008B80020A0D7 /* StatisticsViewModel.swift in Sources */,
 				2AED5D4E2AA615990049ACD4 /* UIColor + Extension.swift in Sources */,
 				2A1F65E02ADB319000DB86D7 /* AnalyticsService.swift in Sources */,
 				2A5383DC2ADAD8020012598F /* ColoursTheme.swift in Sources */,

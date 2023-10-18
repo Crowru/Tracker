@@ -40,6 +40,9 @@ enum LocalizableKeys {
     static let showTrackerButton = "showTrackerButton".localised()
     static let showIrregularEventButton = "showIrregularEventButton".localised()
     
+    static let editingHabits = "editingHabits".localised()
+    static let editingIrregularEvent = "editingIrregularEvent".localised()
+    
     static let newTrackerCategory = "newTrackerCategory".localised()
     static let newTrackerTimetable = "newTrackerTimetable".localised()
 

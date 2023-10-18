@@ -8,16 +8,16 @@
 import Foundation
 
 protocol AnalyticsServiceProtocol: Any {
-    func activateAnalytics()
-    func openScreenReport(screen: ScreenName)
-    func closeScreenReport(screen: ScreenName)
-    func addTrackReport()
-    func editTrackReport()
-    func deleteTrackReport()
-    func addFilterReport()
-    func clickRecordTrackReport()
-    func clickHabitReport()
-    func clickIreggularEventReport()
-    func clickCreateTrackerReport()
-    func clickExitViewNewTracker()
+    static func activateAnalytics()
+    static func openScreenReport(screen: ScreenName)
+    static func closeScreenReport(screen: ScreenName)
+    static func addTrackReport()
+    static func editTrackReport()
+    static func deleteTrackReport()
+    static func addFilterReport()
+    static func clickRecordTrackReport()
+    static func clickHabitReport()
+    static func clickIreggularEventReport()
+    static func clickCreateTrackerReport()
+    static func clickExitViewNewTracker()
 }
