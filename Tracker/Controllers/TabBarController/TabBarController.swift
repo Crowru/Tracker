@@ -16,7 +16,7 @@ final class TabBarController: UITabBarController {
         let statisticViewController = StatisticsViewController()
         let statisticViewModel = StatisticsViewModel()
         statisticViewController.initialize(viewModel: statisticViewModel)
-        trackerViewController.delegate = statisticViewModel
+        trackerViewController.delegateStatistic = statisticViewModel
         let mainViewController = UINavigationController(rootViewController: trackerViewController)
         let secondViewController = UINavigationController(rootViewController: statisticViewController)
         

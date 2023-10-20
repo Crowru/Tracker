@@ -71,8 +71,18 @@
 
 "statisticsErrorLabel" = "There is nothing to analyze yet";
 
+"showDeleteAlert" = "Are you sure you want to delete the tracker?";
+
 "showAlertTitle" = "Error";
 "showAlertOk" = "Ok";
+
+"filterButton" = "Filters";
+"filterTitleLabelOne" = "All trackers";
+"filterTitleLabelTwo" = "Trackers for today";
+"filterTitleLabelThree" = "Completed";
+"filterTitleLabelFour" = "Uncompleted";
+
+"pinnedTrackers" = "Pinned";
 
 "Monday" = "Monday";
 "Tuesday" = "Tuesday";

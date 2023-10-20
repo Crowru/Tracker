@@ -44,6 +44,7 @@
 		2ACDCA4C2AC48DDA008827A0 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDCA4B2AC48DDA008827A0 /* UserDefaultsManager.swift */; };
 		2AD904D42AC1A12300CBB9E0 /* OnboardingFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD904D32AC1A12300CBB9E0 /* OnboardingFirst.swift */; };
 		2AD904D62AC1A26F00CBB9E0 /* OnboardingSecond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AD904D52AC1A26F00CBB9E0 /* OnboardingSecond.swift */; };
+		2AE5A1842AE080E700C030EB /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE5A1832AE080E700C030EB /* FiltersViewController.swift */; };
 		2AED5D322AA0FB4E0049ACD4 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AED5D312AA0FB4E0049ACD4 /* Tracker.swift */; };
 		2AED5D352AA10A1D0049ACD4 /* UIView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AED5D342AA10A1D0049ACD4 /* UIView + Extension.swift */; };
 		2AED5D372AA10E640049ACD4 /* Cell + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AED5D362AA10E640049ACD4 /* Cell + Extension.swift */; };
@@ -119,6 +120,7 @@
 		2ACDCA4B2AC48DDA008827A0 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		2AD904D32AC1A12300CBB9E0 /* OnboardingFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirst.swift; sourceTree = "<group>"; };
 		2AD904D52AC1A26F00CBB9E0 /* OnboardingSecond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSecond.swift; sourceTree = "<group>"; };
+		2AE5A1832AE080E700C030EB /* FiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
 		2AED5D312AA0FB4E0049ACD4 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		2AED5D342AA10A1D0049ACD4 /* UIView + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView + Extension.swift"; sourceTree = "<group>"; };
 		2AED5D362AA10E640049ACD4 /* Cell + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cell + Extension.swift"; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				2A06A8222AC20D3100FFB324 /* Onboarding */,
 				2A12A2B22A9A2AD90024B3E4 /* TabBarController */,
 				2A12A2B52A9A2AFF0024B3E4 /* Tracker */,
+				2AE5A1822AE080AD00C030EB /* Filters */,
 				2AED5D382AA212E20049ACD4 /* NewTrackers */,
 				2A12A2BA2A9A73F50024B3E4 /* Statistic */,
 			);
@@ -347,6 +350,14 @@
 				2A5383DB2ADAD8020012598F /* ColoursTheme.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		2AE5A1822AE080AD00C030EB /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				2AE5A1832AE080E700C030EB /* FiltersViewController.swift */,
+			);
+			path = Filters;
 			sourceTree = "<group>";
 		};
 		2AED5D302AA0FB340049ACD4 /* Models */ = {
@@ -618,6 +629,7 @@
 				2A1F65E02ADB319000DB86D7 /* AnalyticsService.swift in Sources */,
 				2A5383DC2ADAD8020012598F /* ColoursTheme.swift in Sources */,
 				2A6804132AB38A7F0067DB79 /* UIColorMarshalling.swift in Sources */,
+				2AE5A1842AE080E700C030EB /* FiltersViewController.swift in Sources */,
 				2A68040F2AB358DB0067DB79 /* TrackerRecordStore.swift in Sources */,
 				2AED5D552AA6564E0049ACD4 /* AddNewCategoryViewController.swift in Sources */,
 				2A9D48572AD5A9A20058AF33 /* LocalizableKeys.swift in Sources */,

@@ -76,4 +76,14 @@ enum LocalizableKeys {
     static let showAlertOk = "showAlertOk".localised()
     
     static let statisticsTrackersCompleted = "statisticsTrackersCompleted".localised()
+    
+    static let filterButton = "filterButton".localised()
+    static let filterLabelOne = "filterTitleLabelOne".localised()
+    static let filterLabelTwo = "filterTitleLabelTwo".localised()
+    static let filterLabelThree = "filterTitleLabelThree".localised()
+    static let filterLabelFour = "filterTitleLabelFour".localised()
+    
+    static let showDeleteAlert = "showDeleteAlert".localised()
+    
+    static let pinnedTrackers = "pinnedTrackers".localised()
 }

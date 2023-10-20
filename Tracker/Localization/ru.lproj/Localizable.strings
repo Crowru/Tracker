@@ -71,8 +71,18 @@
 
 "statisticsErrorLabel" = "Анализировать пока нечего";
 
+"showDeleteAlert" = "Уверены что хотите удалить трекер?";
+
 "showAlertTitle" = "Ошибка";
 "showAlertOk" = "Хорошо";
+
+"filterButton" = "Фильтры";
+"filterTitleLabelOne" = "Все трекеры";
+"filterTitleLabelTwo" = "Трекеры на сегодня";
+"filterTitleLabelThree" = "Завершенные";
+"filterTitleLabelFour" = "Не завершенные";
+
+"pinnedTrackers" = "Закреплённые";
 
 "Monday" = "Понедельник";
 "Tuesday" = "Вторник";
