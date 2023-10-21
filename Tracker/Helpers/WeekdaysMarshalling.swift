@@ -9,13 +9,13 @@ import Foundation
 
 final class WeekdaysMarshalling {
     private let weekdays: [String] = [
-    "Mon".localised(),
-    "Tue".localised(),
-    "Wed".localised(),
-    "Thu".localised(),
-    "Fri".localised(),
-    "Sat".localised(),
-    "Sun".localised()
+        "Mon".localised(),
+        "Tue".localised(),
+        "Wed".localised(),
+        "Thu".localised(),
+        "Fri".localised(),
+        "Sat".localised(),
+        "Sun".localised()
     ]
     
     func makeStringFromArray(_ timetable: [String]) -> String {

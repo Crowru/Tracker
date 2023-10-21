@@ -117,12 +117,16 @@ final class TrackerViewController: UIViewController {
     
     private func showBackgroundView(forCollection: Bool) {
         if visibleCategories.isEmpty {
-            let emptyView = EmptyView(frame: CGRect(x: 0,
-                                                    y: 0,
-                                                    width: view.bounds.width,
-                                                    height: view.bounds.height),
-                                      image: forCollection ? ImageAssets.trackerErrorImage : ImageAssets.trackerNoFoundImage,
-                                      text: forCollection ? LocalizableKeys.emptyErrorStub : LocalizableKeys.searchErrorStub)
+            let emptyView = EmptyView(
+                frame: CGRect(
+                    x: 0,
+                    y: 0,
+                    width: view.bounds.width,
+                    height: view.bounds.height
+                ),
+                image: forCollection ? ImageAssets.trackerErrorImage : ImageAssets.trackerNoFoundImage,
+                text: forCollection ? LocalizableKeys.emptyErrorStub : LocalizableKeys.searchErrorStub
+            )
             collectionView.backgroundView = emptyView
             collectionView.isScrollEnabled = false
             filterButton.isHidden = true
@@ -715,15 +719,14 @@ extension TrackerViewController: UISearchBarDelegate {
 //MARK: - SetupViews
 private extension TrackerViewController {
     func setupViews() {
-        view.backgroundColor = ColoursTheme.whiteDayBlackDay
         categories = trackerCategoryStore.categories
         visibleCategories = categories
         filteredCategoriesByDate = categories
         completedTrackers = trackerRecordStore.trackerRecords
         
-        pinnedCategories = categories.filter({ trackerCategory in
+        pinnedCategories = categories.filter { trackerCategory in
             trackerCategory.title == LocalizableKeys.pinnedTrackers
-        })
+        }
         
         view.addSubviews(collectionView, filterButton)
     }
