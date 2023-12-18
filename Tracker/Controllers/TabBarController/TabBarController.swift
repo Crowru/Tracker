@@ -8,19 +8,24 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-    
-    let mainTrackerViewController = UINavigationController(rootViewController: TrackerViewController())
-    let statisticViewController = UINavigationController(rootViewController: StatisticViewController())
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBar.tintColor = .yp_Blue
-        generateTabBar()
+        
+        let trackerViewController = TrackerViewController()
+        let statisticViewController = StatisticsViewController()
+        let statisticViewModel = StatisticsViewModel()
+        statisticViewController.initialize(viewModel: statisticViewModel)
+        trackerViewController.delegateStatistic = statisticViewModel
+        let mainViewController = UINavigationController(rootViewController: trackerViewController)
+        let secondViewController = UINavigationController(rootViewController: statisticViewController)
+        
+        generateTabBar(mainViewController, secondViewController)
         
         if #available(iOS 13.0, *) {
             let tabBarAppearance: UITabBarAppearance = UITabBarAppearance()
             tabBarAppearance.configureWithDefaultBackground()
-            tabBarAppearance.backgroundColor = .ypWhiteDay
+            tabBarAppearance.backgroundColor = .clear
             UITabBar.appearance().standardAppearance = tabBarAppearance
             if #available(iOS 15.0, *) {
                 UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
@@ -28,19 +33,19 @@ final class TabBarController: UITabBarController {
         }
     }
     
-    private func generateTabBar() {
-        mainTrackerViewController.tabBarItem = UITabBarItem(
-            title: "Трекеры",
-            image: UIImage(named: "trackersIcon"),
+    private func generateTabBar(_ main: UINavigationController, _ second: UINavigationController) {
+        main.tabBarItem = UITabBarItem(
+            title: LocalizableKeys.trackersTabBarItem,
+            image: ImageAssets.tabBarTrackersIcon,
             selectedImage: nil
         )
         
-        statisticViewController.tabBarItem = UITabBarItem(
-            title: "Статистика",
-            image: UIImage(named: "statisticIcon"),
+        second.tabBarItem = UITabBarItem(
+            title: LocalizableKeys.statisticsTabBarItem,
+            image: ImageAssets.tabBarStatisticIcon,
             selectedImage: nil
         )
         
-        self.viewControllers = [mainTrackerViewController, statisticViewController]
+        self.viewControllers = [main, second]
     }
 }

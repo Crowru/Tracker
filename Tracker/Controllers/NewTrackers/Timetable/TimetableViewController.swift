@@ -7,17 +7,6 @@
 
 import UIKit
 
-private enum WeekDays: String, CaseIterable {
-    case monday = "Понедельник"
-    case tuesday = "Вторник"
-    case wednesday = "Среда"
-    case thursday = "Четверг"
-    case friday = "Пятница"
-    case saturday = "Суббота"
-    case sunday = "Воскресенье"
-    static let numberOfDays = WeekDays.allCases.count
-}
-
 final class TimetableViewController: UIViewController {
     
     weak var delegate: NewTrackerViewControllerProtocol?
@@ -30,7 +19,7 @@ final class TimetableViewController: UIViewController {
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.rowHeight = 75
         tableView.isScrollEnabled = true
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = ColoursTheme.blackDayWhiteDay
         tableView.allowsSelection = false
         tableView.dataSource = self
         return tableView
@@ -38,9 +27,9 @@ final class TimetableViewController: UIViewController {
     
     private lazy var doneButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .ypBlackDay
+        button.setTitle(LocalizableKeys.addNewCategoryDoneButton, for: .normal)
+        button.setTitleColor(ColoursTheme.blackDayWhiteDay, for: .normal)
+        button.backgroundColor = ColoursTheme.whiteDayBlackDay
         button.layer.cornerRadius = 16
         button.addTarget(self, action: #selector(saveWeekDays), for: .touchUpInside)
         return button
@@ -68,11 +57,11 @@ extension TimetableViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TimetableCell.identifier, for: indexPath) as? TimetableCell else { return UITableViewCell() }
-        cell.textLabel?.text = WeekDays.allCases[indexPath.row].rawValue
-        cell.backgroundColor = .ypBackgroundDay
+        cell.textLabel?.text = WeekDays.localize(WeekDays.allCases[indexPath.row])()
+        cell.backgroundColor = ColoursTheme.backgroundNightDay
         cell.delegateCell = self
         timetableArray.forEach { day in
-            if day == "".shortDaysFromLong(for: (cell.textLabel?.text) ?? "") {
+            if day == WeekDays[cell.textLabel?.text ?? ""] {
                 cell.switchDay.isOn = true
                 didToogleSwitch(for: day, isOn: true)
             }
@@ -91,7 +80,7 @@ extension TimetableViewController: TimetableCellDelegate {
 
 private extension TimetableViewController {
     func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.addSubviews(tableView, doneButton)
     }
     

@@ -13,7 +13,7 @@ enum TrackerStoreError: Error {
 }
 
 final class TrackerStore: NSObject {
-    private let uiCollorMarshalling = UIColorMarshalling()
+    private let uiColorMarshalling = UIColorMarshalling()
     private let weekdaysMarshalling = WeekdaysMarshalling()
     
     private let context: NSManagedObjectContext
@@ -67,7 +67,7 @@ final class TrackerStore: NSObject {
         return Tracker(
             id: id,
             name: name,
-            color: uiCollorMarshalling.color(from: color),
+            color: uiColorMarshalling.color(from: color),
             emojie: emojie,
             timetable: weekdaysMarshalling.makeWeekDayArrayFromString(timetable)
         )
@@ -87,10 +87,32 @@ final class TrackerStore: NSObject {
         let trackerCoreData = TrackerCoreData(context: context)
         trackerCoreData.trackerID = tracker.id
         trackerCoreData.name = tracker.name
-        trackerCoreData.color = uiCollorMarshalling.hexString(from: tracker.color)
+        trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
         trackerCoreData.emojie = tracker.emojie
         trackerCoreData.timetable = weekdaysMarshalling.makeStringFromArray(tracker.timetable ?? [])
         return trackerCoreData
+    }
+    
+    func updateTracker(with tracker: Tracker) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCoreData.trackerID), tracker.id.uuidString)
+        
+        do {
+            let fetchedTrackers = try context.fetch(request)
+            if let trackerToUpdate = fetchedTrackers.first {
+                trackerToUpdate.name = tracker.name
+                trackerToUpdate.color = uiColorMarshalling.hexString(from: tracker.color)
+                trackerToUpdate.emojie = tracker.emojie
+                trackerToUpdate.timetable = weekdaysMarshalling.makeStringFromArray(tracker.timetable ?? [])
+                
+                try context.save()
+            } else {
+                assertionFailure("Failed to find tracker with UUID: \(tracker.id)")
+            }
+        } catch {
+            assertionFailure("Failed to fetch and update tracker: \(error)")
+            throw error
+        }
     }
     
     func deleteTracker(tracker: Tracker) {

@@ -9,7 +9,7 @@ import UIKit
 
 final class EmptyView: UIView {
     private lazy var placeholderImage: UIImageView = {
-        let image = UIImage(named: "errorImage")
+        let image = UIImage()
         let imageView = UIImageView(image: image)
         return imageView
     }()
@@ -37,7 +37,7 @@ final class EmptyView: UIView {
 // MARK: - Layouts
 private extension EmptyView {
     func setupViews() {
-        self.backgroundColor = .white
+        self.backgroundColor = ColoursTheme.blackDayWhiteDay
         
         addSubviews(placeholderImage, textLabel)
         

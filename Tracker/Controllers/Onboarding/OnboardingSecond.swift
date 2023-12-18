@@ -10,12 +10,12 @@ import UIKit
 final class OnboardingSecond: UIViewController {
     private let backgroundImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "secondBackground")
+        imageView.image = ImageAssets.onboardingSecondBackground
         return imageView
     }()
     private let labelOnboarding: UILabel = {
         let label = UILabel()
-        label.text = "Даже если это не литры воды и йога"
+        label.text = LocalizableKeys.labelOnboardingSecond
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textColor = .ypBlackDay
         label.numberOfLines = 2
@@ -25,7 +25,7 @@ final class OnboardingSecond: UIViewController {
     private lazy var tapButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlackDay
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(LocalizableKeys.buttonOnboarding, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhiteDay, for: .normal)
         button.layer.cornerRadius = 16

@@ -11,7 +11,7 @@ final class HeaderViewCell: UICollectionReusableView {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        label.textColor = .black
+        label.textColor = ColoursTheme.whiteDayBlackDay
         return label
     }()
     

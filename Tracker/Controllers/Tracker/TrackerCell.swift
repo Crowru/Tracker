@@ -14,20 +14,14 @@ protocol TrackerCellDelegate: AnyObject {
 
 final class TrackerCell: UICollectionViewCell {
     
+    private let pinnedImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = ImageAssets.pinned
+        imageView.isHidden = true
+        return imageView
+    }()
+    
     weak var delegate: TrackerCellDelegate?
-    private var isCompletedToday = false
-    private var trackerId: UUID?
-    private var indexPath: IndexPath?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-        setupConstraints()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     lazy var colorView: UIView = {
         let view = UIView()
@@ -57,7 +51,7 @@ final class TrackerCell: UICollectionViewCell {
     private lazy var counterLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypBlackDay
+        label.textColor = ColoursTheme.whiteDayBlackDay
         return label
     }()
     
@@ -71,20 +65,81 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
-    private let pinnedImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "Pinned")
-        imageView.isHidden = true
-        return imageView
-    }()
+    private var isCompletedToday = false
+    private var trackerId: UUID?
+    private var indexPath: IndexPath?
+    private var isPinnedToday = false
     
-    private func setupViews() {
+    // MARK: Life cycle
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func pinnedImageEnabled(yes: Bool) {
+        yes ? pinnedImage.isHidden = false : (pinnedImage.isHidden = true)
+    }
+    
+    func setupCell(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath) {
+        self.isCompletedToday = isCompletedToday
+        self.trackerId = tracker.id
+        self.indexPath = indexPath
+        
+        updateCounterText(days: completedDays)
+        updatePlusButton(trackerCompleted: isCompletedToday)
+        
+        colorView.backgroundColor = tracker.color
+        textLabel.text = tracker.name
+        emojiLabel.text = tracker.emojie
+        plusButton.backgroundColor = tracker.color
+    }
+    
+    func setupPinned(tracker: Tracker, isPinnedToday: Bool, indexPath: IndexPath) {
+        self.isPinnedToday = isPinnedToday
+        self.trackerId = tracker.id
+        self.indexPath = indexPath
+        pinnedImageEnabled(yes: isPinnedToday)
+    }
+    
+    private func updateCounterText(days: Int) {
+        let tasksString = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfTasks", comment: "Number of remaining tasks"), days)
+        counterLabel.text = tasksString
+    }
+    
+    private func updatePlusButton(trackerCompleted: Bool) {
+        let image: UIImage = (trackerCompleted ? ImageAssets.systemCheckmark : ImageAssets.systemPlus)!
+        plusButton.setImage(image, for: .normal)
+        let buttonOpacity: Float = trackerCompleted ? 0.3 : 1
+        plusButton.layer.opacity = buttonOpacity
+    }
+    
+    // MARK: - Action
+    @objc
+    private func buttonTapped() {
+        guard let trackerId = trackerId, let indexPath = indexPath else { return }
+        if isCompletedToday {
+            delegate?.uncompletedTracker(id: trackerId, at: indexPath)
+        } else {
+            delegate?.completedTracker(id: trackerId, at: indexPath)
+        }
+    }
+}
+
+// MARK: - Layouts
+private extension TrackerCell {
+    func setupViews() {
         self.backgroundColor = .clear
         contentView.addSubviews(colorView, counterLabel, plusButton)
         colorView.addSubviews(emojiLabel, textLabel, pinnedImage)
     }
     
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             colorView.heightAnchor.constraint(equalToConstant: contentView.bounds.width * 90/167),
             colorView.topAnchor.constraint(equalTo: topAnchor),
@@ -113,55 +168,5 @@ final class TrackerCell: UICollectionViewCell {
             pinnedImage.heightAnchor.constraint(equalToConstant: 24),
             pinnedImage.widthAnchor.constraint(equalToConstant: 24)
         ])
-    }
-    
-    func pinnedImageEnabled(yes: Bool) {
-        yes ? pinnedImage.isHidden = false : (pinnedImage.isHidden = true)
-    }
-    
-    func setupCell(tracker: Tracker, isCompletedToday: Bool, completedDays: Int, indexPath: IndexPath) {
-        self.isCompletedToday = isCompletedToday
-        self.trackerId = tracker.id
-        self.indexPath = indexPath
-        
-        updateCounterText(days: completedDays)
-        updatePlusButton(trackerCompleted: isCompletedToday)
-        
-        colorView.backgroundColor = tracker.color
-        textLabel.text = tracker.name
-        emojiLabel.text = tracker.emojie
-        plusButton.backgroundColor = tracker.color
-    }
-    
-    private func updateCounterText(days: Int) {
-        let lastDigit = days % 10
-        let lastTwoDigits = days % 100
-        
-        switch lastDigit {
-        case 1 where lastTwoDigits != 11:
-            counterLabel.text = "\(days) день"
-        case 2...4 where !(12...14 ~= lastTwoDigits):
-            counterLabel.text = "\(days) дня"
-        default:
-            counterLabel.text = "\(days) дней"
-        }
-    }
-    
-    private func updatePlusButton(trackerCompleted: Bool) {
-        let image: UIImage = (trackerCompleted ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus"))!
-        plusButton.setImage(image, for: .normal)
-        let buttonOpacity: Float = trackerCompleted ? 0.3 : 1
-        plusButton.layer.opacity = buttonOpacity
-    }
-    
-    // MARK: - Action
-    @objc
-    private func buttonTapped() {
-        guard let trackerId = trackerId, let indexPath = indexPath else { return }
-        if isCompletedToday {
-            delegate?.uncompletedTracker(id: trackerId, at: indexPath)
-        } else {
-            delegate?.completedTracker(id: trackerId, at: indexPath)
-        }
     }
 }

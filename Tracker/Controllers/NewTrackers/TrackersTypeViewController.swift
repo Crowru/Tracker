@@ -8,17 +8,16 @@
 import UIKit
 
 final class TrackersTypeViewController: UIViewController {
-    
     private lazy var habitButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(LocalizableKeys.chooseTrackerButton, for: .normal)
         button.addTarget(self, action: #selector(addNewHabit), for: .touchUpInside)
         return button
     }()
     
     private lazy var irregularEventButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(LocalizableKeys.showIrregularEventButton, for: .normal)
         button.addTarget(self, action: #selector(addIreggularEvent), for: .touchUpInside)
         return button
     }()
@@ -40,7 +39,7 @@ final class TrackersTypeViewController: UIViewController {
             self.delegate?.createTracker(tracker, titleCategory: titleCotegory)
         }
         let navigationController = UINavigationController(rootViewController: newTrackerVC)
-        navigationController.navigationBar.barTintColor = .ypWhiteDay
+        navigationController.navigationBar.barTintColor = ColoursTheme.blackDayWhiteDay
         navigationController.navigationBar.shadowImage = UIImage()
         present(navigationController, animated: true)
     }
@@ -48,25 +47,27 @@ final class TrackersTypeViewController: UIViewController {
     // MARK: Selectors
     @objc
     private func addNewHabit() {
-        showTrackers(false, "Новая привычка")
+        AnalyticsService.clickHabitReport()
+        showTrackers(false, LocalizableKeys.showTrackerButton)
         UserDefaultsManager.timetableArray = []
     }
     
     @objc
     private func addIreggularEvent() {
-        showTrackers(true, "Новое нерегулярное событие")
+        AnalyticsService.clickIreggularEventReport()
+        showTrackers(true, LocalizableKeys.showIrregularEventButton)
     }
 }
 
 // MARK: - SetupViews
 private extension TrackersTypeViewController {
     func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = ColoursTheme.blackDayWhiteDay
         view.addSubviews(habitButton, irregularEventButton)
         [habitButton, irregularEventButton].forEach {
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-            $0.backgroundColor = .ypBlackDay
-            $0.tintColor = .white
+            $0.backgroundColor = ColoursTheme.whiteDayBlackDay
+            $0.setTitleColor(ColoursTheme.blackDayWhiteDay, for: .normal)
             $0.layer.cornerRadius = 16
             $0.layer.masksToBounds = true
         }
